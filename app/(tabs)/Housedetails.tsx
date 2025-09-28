@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
-export default function HouseDetails() {
+
+export default function HouseDetails({navigate}: {navigate: (screen: string) => void}) {
+  console.log(navigate);
   const [expanded, setExpanded] = useState<string | null>(null);
 
   const toggleExpand = (id: string) => {
@@ -27,7 +29,7 @@ export default function HouseDetails() {
         </Text>
 
         {/* Add Member Button */}
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={() => {navigate('AddMember')}}>
           <Text style={styles.addButtonText}>+ Add New Member</Text>
         </TouchableOpacity>
 
