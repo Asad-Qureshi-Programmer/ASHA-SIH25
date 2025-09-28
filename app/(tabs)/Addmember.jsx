@@ -42,7 +42,7 @@ const AddFamilyFormScreen = () => {
       <View style={styles.content}>
         <View style={styles.titleContainer}>
           <MaterialCommunityIcons name="message-text-outline" size={24} color="#000" />
-          <Text style={styles.titleText}>Add New Member</Text>
+          <Text style={styles.titleText}>Add New Membr</Text>
         </View>
 
         {/* Name Input Field */}
@@ -86,7 +86,7 @@ const AddFamilyFormScreen = () => {
 
         {/* Main Action Button */}
         <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.addButtonText}>Add Family</Text>
+          <Text style={styles.addButtonText}>Add Member</Text>
           <Feather name="arrow-right" size={20} color="#fff" style={{ marginLeft: 5 }} />
         </TouchableOpacity>
       </View>
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center',
+   justifyContent: 'center',
   },
   titleContainer: {
     flexDirection: 'row',

@@ -433,7 +433,9 @@ const App = () => {
   return (
     <SafeAreaView style={styles.appContainer}>
       <AppHeader title="App Title" />
-      {renderScreen()}
+      {/* <View style={{maxWidth:"80%", alignSelf:"center", flex:1, scrollbarWidth: 'none',}}> */}
+        {renderScreen()}
+      {/* </View> */}
       <BottomTabs activeTab={activeTab} setTab={(tab) => { setActiveTab(tab); navigate(tab === 'List' ? 'Houses' : tab === 'Add' ? 'AddFamily' : 'Tasks'); }} />
       {/* <View style={{width:"100%", height:"50px", backgroundColor:"#fff"}}></View> */}
     </SafeAreaView>
@@ -600,7 +602,7 @@ const styles = StyleSheet.create({
   },
   // Registered Houses Screen
   addHouseButton: {
-    backgroundColor: '#1D4ED8',
+    backgroundColor: 'rgb(30 144 255)',
     padding: 14,
     borderRadius: 10,
     alignItems: 'center',
@@ -683,7 +685,7 @@ const styles = StyleSheet.create({
   },
   // House Details Screen
   addMemberButton: {
-    backgroundColor: '#10B981', // Green for Add Member
+    backgroundColor: `rgb(30 144 255)`, // Green for Add Member
     padding: 12,
     borderRadius: 10,
     alignItems: 'center',
