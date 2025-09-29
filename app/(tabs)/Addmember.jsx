@@ -1,10 +1,3 @@
-// export default function Addmember(){
-//     return(
-//         <>
-        
-//         </>
-//     )
-// }
 import React, { useState } from 'react';
 import {
   View,
@@ -34,7 +27,21 @@ const DropdownPlaceholder = ({ label, value = 'Select' }) => (
 const AddFamilyFormScreen = () => {
   const [gender, setGender] = useState('Select'); // State for gender
   const [tag, setTag] = useState('Select'); // State for tag
+  const [PopUp, setPopUp] = useState(0); 
 
+  function data(){
+    return [
+      {
+        id: idd+1,
+        name: "",
+        age: 0,
+        gender: gender,
+        status: "",
+        note: "",
+        medicalInfo: "",
+      },
+    ]
+  }
   return (
     <SafeAreaView style={styles.container}>
       
@@ -64,7 +71,11 @@ const AddFamilyFormScreen = () => {
           <View style={styles.halfInput}>
             <Text style={styles.label}>Gender</Text>
             {/* This would typically be a Picker or a custom dropdown */}
-            <DropdownPlaceholder value={gender} />
+            <DropdownPlaceholder value={gender} onPress={() => {setPopUp(!PopUp);console.log(PopUp)}}/>
+            {PopUp && <View>
+              <View onPress={()=> setGender("Male")}>Male</View>
+              <View onPress={()=>setGender("Female")}>Female</View>
+            </View>}
           </View>
         </View>
 

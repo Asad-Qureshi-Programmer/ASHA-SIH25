@@ -23,7 +23,29 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const { width } = Dimensions.get('window');
 
-const AddFamilyScreen = () => {
+const AddFamilyScreen = ({AddFam, idd}) => {
+  function data(){
+    return [
+      {
+        id: idd+1,
+        head: "",
+        address: "",
+        risk: "",
+        membersCount: 0,
+        highCareCount: 0,
+        lastVisit: "NA",
+        pregnantWomen: 0,
+        eligibleCouples: 0,
+        newbornChildren: 0,
+        childrenUnder5: 0,
+        members: [
+          
+        ],
+        history: [
+        ],
+      },
+    ]
+  }
   return (
     <SafeAreaView style={styles.container}>
       {/* -------------------- Top Header -------------------- */}
@@ -47,7 +69,7 @@ const AddFamilyScreen = () => {
 
         {/* Name Input Field */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Name</Text>
+          <Text style={styles.label}>Head Name</Text>
           <TextInput style={styles.input} />
         </View>
 
@@ -66,7 +88,7 @@ const AddFamilyScreen = () => {
 
         {/* Main Action Button */}
         <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.addButtonText}>Add Family</Text>
+          <Text style={styles.addButtonText} onPress={() => AddFam(data())}>Add Family</Text>
           <Feather name="arrow-right" size={20} color="#fff" style={{ marginLeft: 5 }} />
         </TouchableOpacity>
       </View>

@@ -12,6 +12,7 @@ import {
 import { ta } from 'zod/v4/locales';
 import AddFamily from './AddFamily';
 import AddMember from './Addmember';
+import MemberDetail from './MemberDetail'
 const { width } = Dimensions.get('window');
 
 let targetRerender = false;
@@ -20,6 +21,32 @@ const MOCK_DATA = {
   tasks: [
     { id: 1, text: "3 children due for immunization.", done: false },
     { id: 2, text: "2 ANC visits due", done: false },
+  ],
+  member: [
+    { id: 1, name: "Ravi Kumar", age: 40, gender: "Male", role: "Head", note: "High BP", status: "Head", medicalInfo: "Prescription updated and medicine delivered." },
+    {
+      id: 2,
+      name: "Sunita Kumar",
+      age: 30,
+      gender: "Female",
+      role: "Wife",
+      status: "Pregnant",
+      note: "Pregnant",
+      medicalInfo: "2/5 ANC Visits done. 1/2 TT Vaccine Done. 50/100 IFA Tablets delivered.",
+    },
+    { id: 3, name: "Shivam Kumar", age: 1, gender: "Male", role: "Son", status: "Child", note: "Measles Vaccination due", medicalInfo: "Next checkup in 3 months." },
+    { id: 4, name: "Priya Kumar", age: 7, gender: "Female", role: "Daughter", status: "Normal", note: "Normal health status", medicalInfo: "Last checked on 20/09/2025" },
+    { id: 5, name: "Ravi Kumar", age: 40, gender: "Male", role: "Head", note: "High BP", status: "Head", medicalInfo: "Prescription updated and medicine delivered." },
+    {
+      id: 6,
+      name: "Sunita Kumar",
+      age: 30,
+      gender: "Female",
+      role: "Wife",
+      status: "Pregnant",
+      note: "Pregnant",
+      medicalInfo: "2/5 ANC Visits done. 1/2 TT Vaccine Done. 50/100 IFA Tablets delivered.",
+    },
   ],
   houses: [
     {
@@ -35,19 +62,7 @@ const MOCK_DATA = {
       newbornChildren: 1,
       childrenUnder5: 2,
       members: [
-        { id: 1, name: "Ravi Kumar", age: 40, gender: "Male", role: "Head", note: "High BP", status: "Head", medicalInfo: "Prescription updated and medicine delivered." },
-        {
-          id: 2,
-          name: "Sunita Kumar",
-          age: 30,
-          gender: "Female",
-          role: "Wife",
-          status: "Pregnant",
-          note: "Pregnant",
-          medicalInfo: "2/5 ANC Visits done. 1/2 TT Vaccine Done. 50/100 IFA Tablets delivered.",
-        },
-        { id: 3, name: "Shivam Kumar", age: 1, gender: "Male", role: "Son", status: "Child", note: "Measles Vaccination due", medicalInfo: "Next checkup in 3 months." },
-        { id: 4, name: "Priya Kumar", age: 7, gender: "Female", role: "Daughter", status: "Normal", note: "Normal health status", medicalInfo: "Last checked on 20/09/2025" },
+        2,3,5,6
       ],
       history: [
         { date: "25/09/2025", text: "Vaccination of Shivam Kumar Done" },
@@ -67,17 +82,7 @@ const MOCK_DATA = {
       newbornChildren: 1,
       childrenUnder5: 2,
       members: [
-        { id: 1, name: "Ravi Kumar", age: 40, gender: "Male", role: "Head", note: "High BP", status: "Head", medicalInfo: "Prescription updated and medicine delivered." },
-        {
-          id: 2,
-          name: "Sunita Kumar",
-          age: 30,
-          gender: "Female",
-          role: "Wife",
-          status: "Pregnant",
-          note: "Pregnant",
-          medicalInfo: "2/5 ANC Visits done. 1/2 TT Vaccine Done. 50/100 IFA Tablets delivered.",
-        },
+        1, 2, 4, 6
       ],
       history: [
         { date: "25/09/2025", text: "Vaccination of Shivam Kumar Done" },
@@ -97,17 +102,7 @@ const MOCK_DATA = {
       newbornChildren: 0,
       childrenUnder5: 1,
       members: [
-        { id: 1, name: "Ravi Kumar", age: 40, gender: "Male", role: "Head", note: "High BP", status: "Head", medicalInfo: "Prescription updated and medicine delivered." },
-        {
-          id: 2,
-          name: "Sunita Kumar",
-          age: 30,
-          gender: "Female",
-          role: "Wife",
-          status: "Pregnant",
-          note: "Pregnant",
-          medicalInfo: "2/5 ANC Visits done. 1/2 TT Vaccine Done. 50/100 IFA Tablets delivered.",
-        },
+        1, 2
       ],
       history: [
         { date: "25/09/2025", text: "Vaccination of Shivam Kumar Done" },
@@ -367,6 +362,7 @@ const RegisteredHousesScreen = ({ navigate }) => {
 
 const HouseDetailsScreen = ({ houseId, navigate }) => {
   const house = MOCK_DATA.houses.find(h => h.id === houseId);
+  const member = MOCK_DATA.member;
 
   if (!house) {
     return <View style={styles.screenContainer}><Text style={styles.errorText}>House not found.</Text></View>;
@@ -389,9 +385,15 @@ const HouseDetailsScreen = ({ houseId, navigate }) => {
 
       <HouseSummaryCard house={house} />
 
-      {house.members.map(member => (
-        <MemberCard key={member.id} member={member} />
-      ))}
+      {
+        member.map((member) => (
+          house.members.some((id) => id === member.id) ? (
+            <TouchableOpacity onPress={() => {navigate('MemberDetail', {MemberId: member.id});}}>
+              <MemberCard key={member.id} member={member} />
+            </TouchableOpacity>
+          ) : null
+        ))
+      }
 
       <FamilyHistoryCard history={house.history} />
     </ScrollView>
@@ -401,15 +403,27 @@ const HouseDetailsScreen = ({ houseId, navigate }) => {
 
 // --- Main App Component ---
 
+const AddFam = (fam) => {
+  MOCK_DATA.houses.push(fam);
+}
+const AddMem = (mem) => {
+  MOCK_DATA.member.push(mem);
+}
+
 const App = () => {
   const [activeTab, setActiveTab] = useState('Tasks');
   const [houseId, setHouseId] = useState(MOCK_DATA.houses[0].id);
-  const [currentScreen, setCurrentScreen] = useState('Tasks'); // 'Tasks', 'Houses', 'HouseDetails'
+  const [MemberId, setMemberId] = useState(MOCK_DATA.member[0].id);
+  const [currentScreen, setCurrentScreen] = useState('Tasks'); 
 
   const navigate = (screenName, params = {}) => {
     setCurrentScreen(screenName);
+    // console.log(screenName, params);
     if (params.houseId) {
       setHouseId(params.houseId);
+    }
+    if (params.MemberId) {
+      setMemberId(params.MemberId);
     }
   };
 
@@ -422,9 +436,11 @@ const App = () => {
       case 'HouseDetails':
         return <HouseDetailsScreen houseId={houseId} navigate={navigate} />;
       case 'AddFamily':
-        return <AddFamily navigate={navigate}></AddFamily>;
+        return <AddFamily navigate={navigate} AddFam={AddFam} idd={MOCK_DATA.houses[MOCK_DATA.houses.length-1].id}></AddFamily>;
       case 'AddMember':
-        return <AddMember navigate={navigate}></AddMember>
+        return <AddMember navigate={navigate} addMem={AddMem}></AddMember>;
+      case 'MemberDetail':
+        return <MemberDetail navigate={navigate} member={MOCK_DATA.member.find(mem => mem.id === MemberId)} familyId={houseId}></MemberDetail>;
       default:
         return <TodayTasksScreen navigate={navigate} />;
     }
@@ -447,7 +463,6 @@ const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
     backgroundColor: '#F7F8FC',
-    // marginBottom: 50,
   },
   screenContainer: {
     flex: 1,
@@ -484,6 +499,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#4B5563',
     marginRight: 4,
+    marginLeft:10,
   },
   userIconWrapper: {
     width: 30,
@@ -634,9 +650,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 15,
     borderRadius: 10,
-    marginBottom: 10,
-    borderLeftWidth: 5,
-    borderLeftColor: '#3B82F6',
+    borderBottomWidth: 5,
+    borderTopWidth: 2,
+    // marginVertical:5,
+    marginBottom: 17,
+    borderBottomColor: '#efefef',
+    borderTopColor: '#efefef',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
