@@ -2,16 +2,17 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-, "app/(tabs)/MemberDetail.jsx"  ],
+    "expo-env.d.ts",
+    "app/(tabs)/MemberDetail.jsx",
+    "components/ui/textarea.jsx",
+    "components/medical-newborn-form.jsx"
+  ],
   "extends": "expo/tsconfig.base"
 }
