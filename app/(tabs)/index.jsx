@@ -13,6 +13,7 @@ import { ta } from 'zod/v4/locales';
 import AddFamily from './AddFamily';
 import AddMember from './Addmember';
 import MemberDetail from './MemberDetail'
+import MedicalDetailNewBorn from './../../components/MedicalNewbornForm';
 import { set } from 'zod/v4';
 const { width } = Dimensions.get('window');
 
@@ -675,7 +676,7 @@ const App = () => {
       case 'MemberDetail':
         return <MemberDetail navigate={navigate} setMemberData={setMemberData} member={MOCK_DATA.member.find(mem => mem.id === MemberId)} familyId={houseId}></MemberDetail>;
       default:
-        return <TodayTasksScreen navigate={navigate} />;
+        return <MedicalDetailNewBorn navigate={navigate} />;
     }
   };
 
