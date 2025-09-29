@@ -274,10 +274,9 @@ const [MOCK_DATA, setMockData] = useState({
   houses: [
     {
       id: 121002,
-      head: "Ravi Kumar",
+      head: "House 1 Ward 5",
       address: "Basant Vihar Colony, Dhar MP",
       risk: "High Risk",
-      membersCount: 8,
       highCareCount: 2,
       lastVisit: "25/09/2025",
       pregnantWomen: 1,
@@ -287,6 +286,7 @@ const [MOCK_DATA, setMockData] = useState({
       members: [
         2,3,5,6
       ],
+      membersCount: 4,
       history: [
         { date: "25/09/2025", text: "Vaccination of Shivam Kumar Done" },
         { date: "25/09/2025", text: "ANC Visit for Sunita Kumar" },
@@ -295,10 +295,9 @@ const [MOCK_DATA, setMockData] = useState({
     },
     { 
       id: 121003, 
-      head: "Mukesh", 
+      head: "House 12 Ward 5", 
       address: "Kailash Nagar, Dhar MP", 
       risk: "Antenatal", 
-      membersCount: 4, 
       lastVisit: "25/09/2025",
       pregnantWomen: 1,
       eligibleCouples: 2,
@@ -307,6 +306,7 @@ const [MOCK_DATA, setMockData] = useState({
       members: [
         1, 2, 4, 6
       ],
+      membersCount: 4, 
       history: [
         { date: "25/09/2025", text: "Vaccination of Shivam Kumar Done" },
         { date: "25/09/2025", text: "ANC Visit for Sunita Kumar" },
@@ -315,10 +315,9 @@ const [MOCK_DATA, setMockData] = useState({
     },
     { 
       id: 121004,
-      head: "Girish", 
+      head: "House 2 Ward 5", 
       address: "Basant Vihar Colony, Dhar MP", 
       risk: "Vaccination", 
-      membersCount: 4, 
       lastVisit: "24/09/2025",
       pregnantWomen: 0,
       eligibleCouples: 1,
@@ -327,6 +326,7 @@ const [MOCK_DATA, setMockData] = useState({
       members: [
         1, 2
       ],
+      membersCount: 2, 
       history: [
         { date: "25/09/2025", text: "Vaccination of Shivam Kumar Done" },
         { date: "25/09/2025", text: "ANC Visit for Sunita Kumar" },
