@@ -13,41 +13,264 @@ import { ta } from 'zod/v4/locales';
 import AddFamily from './AddFamily';
 import AddMember from './Addmember';
 import MemberDetail from './MemberDetail'
+import { set } from 'zod/v4';
 const { width } = Dimensions.get('window');
 
 let targetRerender = false;
 // --- Mock Data Structure ---
-const MOCK_DATA = {
+const [MOCK_DATA, setMockData] = useState({
   tasks: [
     { id: 1, text: "3 children due for immunization.", done: false },
     { id: 2, text: "2 ANC visits due", done: false },
   ],
   member: [
-    { id: 1, name: "Ravi Kumar", age: 40, gender: "Male", role: "Head", note: "High BP", status: "Head", medicalInfo: "Prescription updated and medicine delivered." },
+    // 1. Sunita Kumar (Pregnant, Early Stage)
+    {
+      id: 1,
+      name: "Sunita Kumar",
+      age: 30,
+      gender: "Female",
+      role: "Wife",
+      status: "Pregnant",
+      note: "Pregnant, 6 months",
+      
+      // --- UPDATED SUMMARY FIELD ---
+      medicalInfo: "1/5 ANC Visits done. 0/2 TT Vaccine Done. 10/100 IFA Tablets delivered.",
+      
+      // Detailed Fields (kept for consistency with the initial structure)
+      ancDone: 1, 
+      tt1: true,
+      tt2: false,
+      booster: false,
+      tbSymptomChecked: true,
+      nutritionCounselling: true,
+      vhsndParticipationDone: false,
+      weight: '55.5',
+      bp: '120/80',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'None',
+      
+      // Medicines Distributed
+      ifaTablets: 50,
+      zincTablets: 0,
+      calciumTablets: 20,
+      orsPackets: 5,
+      paracetamol: 0,
+      dewormingTablets: 1,
+    },
+  
+    // 2. Rajesh Verma (Male, General Health Checkup)
     {
       id: 2,
-      name: "Sunita Kumar",
-      age: 30,
+      name: "Rajesh Verma",
+      age: 45,
+      gender: "Male",
+      role: "Husband",
+      status: "Normal",
+      note: "Smoker, advised counselling.",
+      
+      // --- UPDATED SUMMARY FIELD ---
+      medicalInfo: "2/5 ANC Visits done. 1/2 TT Vaccine Done. 50/100 IFA Tablets delivered.",
+      
+      // Detailed Fields (modified to reflect the summary string)
+      ancDone: 2, 
+      tt1: true,
+      tt2: false,
+      booster: false,
+      tbSymptomChecked: true,
+      nutritionCounselling: false,
+      vhsndParticipationDone: false,
+      weight: '85',
+      bp: '135/90',
+      dangerSigns: 'Mild headache/fatigue',
+      otherMedicalInfo: 'Advised follow-up for high BP.',
+      
+      // Medicines Distributed
+      ifaTablets: 50,
+      zincTablets: 0,
+      calciumTablets: 0,
+      orsPackets: 0,
+      paracetamol: 10,
+      dewormingTablets: 0,
+    },
+  
+    // 3. Meena Devi (Lactating Mother, Post-partum)
+    {
+      id: 3,
+      name: "Meena Devi",
+      age: 25,
       gender: "Female",
       role: "Wife",
-      status: "Pregnant",
-      note: "Pregnant",
-      medicalInfo: "2/5 ANC Visits done. 1/2 TT Vaccine Done. 50/100 IFA Tablets delivered.",
+      status: "Lactating",
+      note: "Child 3 months old. Healthy.",
+      
+      // --- UPDATED SUMMARY FIELD ---
+      medicalInfo: "4/5 ANC Visits done. 2/2 TT Vaccine Done. 85/100 IFA Tablets delivered.",
+      
+      // Detailed Fields
+      ancDone: 4, 
+      tt1: true,
+      tt2: true,
+      booster: true,
+      tbSymptomChecked: true,
+      nutritionCounselling: true,
+      vhsndParticipationDone: true,
+      weight: '52',
+      bp: '110/70',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'Continuing Calcium/IFA post-partum.',
+      
+      // Medicines Distributed
+      ifaTablets: 30,
+      zincTablets: 0,
+      calciumTablets: 40,
+      orsPackets: 0,
+      paracetamol: 0,
+      dewormingTablets: 0,
     },
-    { id: 3, name: "Shivam Kumar", age: 1, gender: "Male", role: "Son", status: "Child", note: "Measles Vaccination due", medicalInfo: "Next checkup in 3 months." },
-    { id: 4, name: "Priya Kumar", age: 7, gender: "Female", role: "Daughter", status: "Normal", note: "Normal health status", medicalInfo: "Last checked on 20/09/2025" },
-    { id: 5, name: "Ravi Kumar", age: 40, gender: "Male", role: "Head", note: "High BP", status: "Head", medicalInfo: "Prescription updated and medicine delivered." },
+  
+    // 4. Anil Kumar (Child, Diarrhoea case)
+    {
+      id: 4,
+      name: "Anil Kumar",
+      age: 5,
+      gender: "Male",
+      role: "Son",
+      status: "Child",
+      note: "Diarrhoea episode 2 days ago.",
+      
+      // --- UPDATED SUMMARY FIELD ---
+      medicalInfo: "3/5 ANC Visits done. 1/2 TT Vaccine Done. 60/100 IFA Tablets delivered. Danger Signs noted: Swelling.",
+      
+      // Detailed Fields
+      ancDone: 3, 
+      tt1: true,
+      tt2: false,
+      booster: false,
+      tbSymptomChecked: false,
+      nutritionCounselling: false,
+      vhsndParticipationDone: false,
+      weight: '18',
+      bp: 'N/A',
+      dangerSigns: 'Dehydration signs',
+      otherMedicalInfo: 'Provided ORS and Zinc.',
+      
+      // Medicines Distributed
+      ifaTablets: 0,
+      zincTablets: 14,
+      calciumTablets: 0,
+      orsPackets: 7,
+      paracetamol: 0,
+      dewormingTablets: 0,
+    },
+  
+    // 5. Sarita Devi (Senior Citizen, Chronic condition)
+    {
+      id: 5,
+      name: "Sarita Devi",
+      age: 72,
+      gender: "Female",
+      role: "Mother-in-law",
+      status: "Chronic",
+      note: "History of diabetes and arthritis.",
+      
+      // --- UPDATED SUMMARY FIELD ---
+      medicalInfo: "5/5 ANC Visits done. 2/2 TT Vaccine Done. 100/100 IFA Tablets delivered.",
+      
+      // Detailed Fields
+      ancDone: 5, 
+      tt1: true,
+      tt2: true,
+      booster: true,
+      tbSymptomChecked: true,
+      nutritionCounselling: true,
+      vhsndParticipationDone: false,
+      weight: '60',
+      bp: '140/95',
+      dangerSigns: 'Swelling in feet (mild)',
+      otherMedicalInfo: 'Referred to PHC for sugar check.',
+      
+      // Medicines Distributed
+      ifaTablets: 0,
+      zincTablets: 0,
+      calciumTablets: 30,
+      orsPackets: 0,
+      paracetamol: 15,
+      dewormingTablets: 0,
+    },
+    
+    // 6. Preeti Kumari (Adolescent Girl)
     {
       id: 6,
-      name: "Sunita Kumar",
-      age: 30,
+      name: "Preeti Kumari",
+      age: 15,
       gender: "Female",
-      role: "Wife",
-      status: "Pregnant",
-      note: "Pregnant",
-      medicalInfo: "2/5 ANC Visits done. 1/2 TT Vaccine Done. 50/100 IFA Tablets delivered.",
+      role: "Daughter",
+      status: "Adolescent",
+      note: "Eligible for weekly iron supplementation.",
+      
+      // --- UPDATED SUMMARY FIELD ---
+      medicalInfo: "1/5 ANC Visits done. 2/2 TT Vaccine Done (Rapid completion). 30/100 IFA Tablets delivered.",
+      
+      // Detailed Fields
+      ancDone: 1, 
+      tt1: true,
+      tt2: true,
+      booster: false,
+      tbSymptomChecked: true,
+      nutritionCounselling: true,
+      vhsndParticipationDone: true,
+      weight: '42',
+      bp: '100/60',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'Mild pallor observed.',
+      
+      // Medicines Distributed
+      ifaTablets: 28, // Weekly supply
+      zincTablets: 0,
+      calciumTablets: 0,
+      orsPackets: 0,
+      paracetamol: 0,
+      dewormingTablets: 1,
+    },
+    
+    // 7. Rohan Sharma (Infant)
+    {
+      id: 7,
+      name: "Rohan Sharma",
+      age: 1,
+      gender: "Male",
+      role: "Son",
+      status: "Infant",
+      note: "Due for routine immunization next week.",
+      
+      // --- UPDATED SUMMARY FIELD ---
+      medicalInfo: "4/5 ANC Visits done. 2/2 TT Vaccine Done. 70/100 IFA Tablets delivered (Next distribution pending).",
+      
+      // Detailed Fields
+      ancDone: 4, 
+      tt1: true,
+      tt2: true,
+      booster: false,
+      tbSymptomChecked: false,
+      nutritionCounselling: true,
+      vhsndParticipationDone: true,
+      weight: '8',
+      bp: 'N/A',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'Checked growth chart - normal.',
+      
+      // Medicines Distributed
+      ifaTablets: 0,
+      zincTablets: 0,
+      calciumTablets: 0,
+      orsPackets: 0,
+      paracetamol: 0,
+      dewormingTablets: 0,
     },
   ],
+  // console.log(memberDataExamples
+  
   houses: [
     {
       id: 121002,
@@ -111,7 +334,7 @@ const MOCK_DATA = {
       ],
     },
   ],
-};
+});
 
 // --- Sub-Components ---
 
@@ -406,8 +629,18 @@ const HouseDetailsScreen = ({ houseId, navigate }) => {
 const AddFam = (fam) => {
   MOCK_DATA.houses.push(fam);
 }
+const AddtoFam = (id, famId) => {
+  MOCK_DATA.houses.find(h => h.id === famId).members.push(id);
+}
 const AddMem = (mem) => {
   MOCK_DATA.member.push(mem);
+}
+const setMemberData = (mem) => {
+  const index = mem.id;
+  setMockData(prevData => {
+    const updatedMembers = prevData.member.map(m => m.id === index ? mem : m);
+    return { ...prevData, member: updatedMembers };
+  });
 }
 
 const App = () => {
@@ -438,9 +671,9 @@ const App = () => {
       case 'AddFamily':
         return <AddFamily navigate={navigate} AddFam={AddFam} idd={MOCK_DATA.houses[MOCK_DATA.houses.length-1].id}></AddFamily>;
       case 'AddMember':
-        return <AddMember navigate={navigate} addMem={AddMem}></AddMember>;
+        return <AddMember navigate={navigate} addMem={AddMem} familyId={houseId} AddtoFam={AddtoFam} idd={MOCK_DATA.member[MOCK_DATA.member.length-1].id} ></AddMember>;
       case 'MemberDetail':
-        return <MemberDetail navigate={navigate} member={MOCK_DATA.member.find(mem => mem.id === MemberId)} familyId={houseId}></MemberDetail>;
+        return <MemberDetail navigate={navigate} setMemberData={setMemberData} member={MOCK_DATA.member.find(mem => mem.id === MemberId)} familyId={houseId}></MemberDetail>;
       default:
         return <TodayTasksScreen navigate={navigate} />;
     }

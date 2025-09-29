@@ -1,14 +1,4 @@
-// export default function AddFamily() {
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Add Family Screen</Text>
-//       <TouchableOpacity style={styles.backButton} onPress={() => navigate('RegisteredHouses')}>
-//         <Text style={styles.backButtonText}>← Back to Houses</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// }
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -24,41 +14,33 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const { width } = Dimensions.get('window');
 
 const AddFamilyScreen = ({AddFam, idd}) => {
+  // State variables for form inputs
+  const [head, setHead] = useState('');
+  const [address, setAddress] = useState('');
+
   function data(){
-    return [
-      {
-        id: idd+1,
-        head: "",
-        address: "",
-        risk: "",
-        membersCount: 0,
-        highCareCount: 0,
-        lastVisit: "NA",
-        pregnantWomen: 0,
-        eligibleCouples: 0,
-        newbornChildren: 0,
-        childrenUnder5: 0,
-        members: [
-          
-        ],
-        history: [
-        ],
-      },
-    ]
+    let fam = {
+      id: idd+1,
+      head: head, // Use state variable
+      address: address, // Use state variable
+      risk: "",
+      membersCount: 0,
+      highCareCount: 0,
+      lastVisit: "",
+      pregnantWomen: 0,
+      eligibleCouples: 0,
+      newbornChildren: 0,
+      childrenUnder5: 0,
+      members: [
+        
+      ],
+      history: [
+      ],
+    };
+    return fam;
   }
   return (
     <SafeAreaView style={styles.container}>
-      {/* -------------------- Top Header -------------------- */}
-      {/* <View style={styles.header}>
-        <Text style={styles.logoText}>LOGO</Text>
-        <View style={styles.headerIcons}>
-          <View style={styles.languageIcon}>
-            <Text style={styles.languageText}>अ</Text>
-          </View>
-          <MaterialCommunityIcons name="account-circle" size={30} color="#000" />
-        </View>
-      </View> */}
-
       {/* -------------------- Content Area -------------------- */}
       <View style={styles.content}>
         <View style={styles.titleContainer}>
@@ -70,7 +52,11 @@ const AddFamilyScreen = ({AddFam, idd}) => {
         {/* Name Input Field */}
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Head Name</Text>
-          <TextInput style={styles.input} />
+          <TextInput 
+            style={styles.input} 
+            value={head}
+            onChangeText={setHead}
+          />
         </View>
 
         {/* Address Input Field */}
@@ -83,7 +69,11 @@ const AddFamilyScreen = ({AddFam, idd}) => {
               <Text style={styles.detectButtonText}>Detect</Text>
             </TouchableOpacity>
           </View>
-          <TextInput style={styles.input} />
+          <TextInput 
+            style={styles.input} 
+            value={address}
+            onChangeText={setAddress}
+          />
         </View>
 
         {/* Main Action Button */}

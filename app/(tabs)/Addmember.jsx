@@ -24,21 +24,35 @@ const DropdownPlaceholder = ({ label, value = 'Select' }) => (
   </View>
 );
 
-const AddFamilyFormScreen = () => {
+const AddFamilyFormScreen = ({idd, familyId, addMem, AddtoFam}) => {
   const [gender, setGender] = useState('Select'); // State for gender
   const [tag, setTag] = useState('Select'); // State for tag
   const [PopUp, setPopUp] = useState(0); 
+
+  // --- STATE VARIABLES TO BE UPDATED ---
+  const [name, setName] = useState('');
+  const [age, setAge] = useState(''); // Will capture age based on DOB input
+  const [status, setStatus] = useState('');
+  const [note, setNote] = useState('');
+  const [medicalInfo, setMedicalInfo] = useState('');
+  // -------------------------------------
+
+  function handleAddMember() {
+    const newMember = data()[0];
+    AddtoFam(newMember.id, familyId);
+    addMem(newMember);
+  }
 
   function data(){
     return [
       {
         id: idd+1,
-        name: "",
-        age: 0,
+        name: name, // Use state variable
+        age: parseInt(age) || 0, // Use state variable
         gender: gender,
-        status: "",
-        note: "",
-        medicalInfo: "",
+        status: status, // Use state variable
+        note: note, // Use state variable
+        medicalInfo: medicalInfo, // Use state variable
       },
     ]
   }
@@ -55,34 +69,57 @@ const AddFamilyFormScreen = () => {
         {/* Name Input Field */}
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Name</Text>
-          <TextInput style={styles.input} />
+          <TextInput 
+            style={styles.input} 
+            value={name}
+            onChangeText={setName}
+          />
         </View>
 
         {/* Date of Birth & Gender Row */}
         <View style={styles.row}>
-          {/* Date of Birth Input */}
+          {/* Date of Birth Input (Used here to capture Age/DOB) */}
           <View style={styles.halfInput}>
-            <Text style={styles.label}>Date of birth</Text>
-            {/* Could be a TextInput or a date picker component */}
-            <TextInput style={styles.input} placeholder="DD/MM/YYYY" placeholderTextColor="#999" />
+            <Text style={styles.label}>Age (Placeholder for DOB)</Text>
+            {/* Using this TextInput to capture 'age' state for simplicity */}
+            <TextInput 
+              style={styles.input} 
+              placeholder="e.g. 30" 
+              placeholderTextColor="#999" 
+              keyboardType="numeric"
+              value={age}
+              onChangeText={setAge}
+            />
           </View>
 
-          {/* Gender Dropdown */}
           <View style={styles.halfInput}>
             <Text style={styles.label}>Gender</Text>
-            {/* This would typically be a Picker or a custom dropdown */}
-            <DropdownPlaceholder value={gender} onPress={() => {setPopUp(!PopUp);console.log(PopUp)}}/>
-            {PopUp && <View>
-              <View onPress={()=> setGender("Male")}>Male</View>
-              <View onPress={()=>setGender("Female")}>Female</View>
-            </View>}
+            <TouchableOpacity onPress={() => setPopUp(!PopUp)}>
+              <DropdownPlaceholder value={gender} />
+            </TouchableOpacity>
+            {PopUp && (
+              <View style={styles.dropdownOptions}>
+                <TouchableOpacity onPress={() => { setGender("Male"); setPopUp(false); }}>
+                  <Text style={styles.dropdownOptionText}>Male</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => { setGender("Female"); setPopUp(false); }}>
+                  <Text style={styles.dropdownOptionText}>Female</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
-        </View>
+        </View> 
 
-        {/* Tag Dropdown */}
+        {/* Status Input Field (New Field to capture state) */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Tag</Text>
-          <DropdownPlaceholder value={tag} />
+          <Text style={styles.label}>Status (e.g., Pregnant, Child, Normal)</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="i.e. Pregnant, Child"
+            placeholderTextColor="#999"
+            value={status}
+            onChangeText={setStatus}
+          />
         </View>
 
         {/* Note Input Field */}
@@ -92,11 +129,25 @@ const AddFamilyFormScreen = () => {
             style={styles.input}
             placeholder="i.e. Measles Vaccination due"
             placeholderTextColor="#999"
+            value={note}
+            onChangeText={setNote}
+          />
+        </View>
+        
+        {/* Medical Info Input Field (New Field to capture state) */}
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Medical Info Summary</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="i.e. 2/5 ANC Visits done..."
+            placeholderTextColor="#999"
+            value={medicalInfo}
+            onChangeText={setMedicalInfo}
           />
         </View>
 
         {/* Main Action Button */}
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={handleAddMember}>
           <Text style={styles.addButtonText}>Add Member</Text>
           <Feather name="arrow-right" size={20} color="#fff" style={{ marginLeft: 5 }} />
         </TouchableOpacity>
@@ -208,6 +259,23 @@ const styles = StyleSheet.create({
   dropdownPlaceholder: {
     fontSize: 16,
     color: '#999', // Gray color for 'Select' placeholder
+  },dropdownOptions: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginTop: 5,
+    padding: 10,
+    elevation: 3, // For shadow on Android
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  dropdownOptionText: {
+    fontSize: 16,
+    color: '#333',
+    paddingVertical: 5,
   },
   addButton: {
     flexDirection: 'row',
