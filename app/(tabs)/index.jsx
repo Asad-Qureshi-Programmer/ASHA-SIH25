@@ -396,7 +396,7 @@ const HouseSummaryCard = ({ house }) => {
   return (
     <View style={styles.card}>
       <View style={styles.summaryAddressContainer}>
-        <Text style={styles.iconTextSmall}>📍</Text>
+        {/* <Text style={styles.iconTextSmall}>📍</Text> */}
         <Text style={styles.summaryAddressText}>{house.address}</Text>
       </View>
       <View style={styles.summaryGrid}>
@@ -592,14 +592,14 @@ const RegisteredHousesScreen = ({ navigate }) => {
             <RiskTag status={house.risk} />
           </View>
           <Text style={styles.houseDetailText}>
-            <Text style={styles.iconTextSmall}>📍</Text> {house.address}
+            <Text style={styles.iconTextSmall}></Text> {house.address}
           </Text>
           <View style={styles.houseDetailRow}>
             <Text style={styles.houseDetailText}>
-              <Text style={styles.iconTextSmall}>👥</Text> Members: {house.membersCount}
+              <Text style={styles.iconTextSmall}></Text> Members: {house.membersCount}
             </Text>
             <Text style={styles.houseDetailText}>
-              <Text style={styles.iconTextSmall}>🕒</Text> Last Visit: {house.lastVisit}
+              <Text style={styles.iconTextSmall}></Text> Last Visit: {house.lastVisit}
             </Text>
             <Text style={styles.houseDetailId}>#{house.id}</Text>
           </View>
@@ -694,6 +694,13 @@ const AddtoFam = (id, famId) => {
 }
 const AddMem = (mem, familyId, navigate) => {
   MOCK_DATA.member.push(mem);
+  MOCK_DATA.houses.find(h => h.id === familyId).membersCount += 1;
+  if(mem.status === "High Risk" || mem.status === "Pregnant" || mem.status === "Antenatal"){
+    MOCK_DATA.houses.find(h => h.id === familyId).highCareCount += 1;
+    if(mem.status === "Pregnant"){
+      MOCK_DATA.houses.find(h => h.id === familyId).pregnantWomen += 1;
+    }
+  }
   navigate('HouseDetails', { houseId: familyId });
 }
 const setMemberData = (mem) => {
