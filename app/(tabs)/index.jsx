@@ -24,6 +24,7 @@ import Diary from './DiaryScreen';
 import ReportsScreen from './Reports';
 import NotificationsScreen from './Notification';
 import SettingsScreen from './Settings';
+import VoiceToTextMicrophone from './VoiceToTextMic';
 
 let targetRerender = false;
 // --- Mock Data Structure ---
@@ -351,6 +352,9 @@ const AppHeader = ({ title, navigate }) => (
   <View style={styles.header}>
     <Text style={styles.logo}>LOGO</Text>
     <View style={styles.headerIcons}>
+      <View style={styles.userIconWrapper}>
+        <VoiceToTextMicrophone></VoiceToTextMicrophone>
+      </View>
       <Text style={styles.iconText}>अ</Text>
       <View style={styles.userIconWrapper}>
         <Text style={styles.iconText} onPress={() => navigate("Profile")}>👤</Text>
