@@ -19,6 +19,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 const { width } = Dimensions.get('window');
 import MedicineScreen from './MedicineScreen';
 import Profile from './Profile';
+import VHSNDScreen from './VHSND';
 
 let targetRerender = false;
 // --- Mock Data Structure ---
@@ -734,6 +735,8 @@ const App = () => {
         return <MedicineScreen navigate={navigate} />;
       case "Profile":
         return <Profile navigate={navigate} />;
+      case 'VHSND':
+        return <VHSNDScreen navigate={navigate}></VHSNDScreen>;
       default:
         return <TodayTasksScreen navigate={navigate} />;
     }
