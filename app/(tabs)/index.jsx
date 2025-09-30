@@ -15,7 +15,10 @@ import AddMember from './Addmember';
 import MemberDetail from './MemberDetail'
 import MedicalDetailNewBorn from './../../components/MedicalNewbornForm';
 import { set } from 'zod/v4';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 const { width } = Dimensions.get('window');
+import MedicineScreen from './MedicineScreen';
+import Profile from './Profile';
 
 let targetRerender = false;
 // --- Mock Data Structure ---
@@ -339,13 +342,13 @@ const [MOCK_DATA, setMockData] = useState({
 
 // --- Sub-Components ---
 
-const AppHeader = ({ title }) => (
+const AppHeader = ({ title, navigate }) => (
   <View style={styles.header}>
     <Text style={styles.logo}>LOGO</Text>
     <View style={styles.headerIcons}>
       <Text style={styles.iconText}>अ</Text>
       <View style={styles.userIconWrapper}>
-        <Text style={styles.iconText}>👤</Text>
+        <Text style={styles.iconText} onPress={() => navigate("Profile")}>👤</Text>
       </View>
     </View>
   </View>
@@ -494,25 +497,37 @@ const BottomTabs = ({ activeTab, setTab }) => {
 
 
 // --- Screen Components ---
+const markTodosDone = (navigate) => {
+  MOCK_DATA.tasks.forEach(task => {
+    if (task.done) {
+      // task.done = false;
+    } else {
+      task.done = true;
+    }
+  });
+}
+
+const today = new Date();
+const localeDate = today.toLocaleDateString();
 
 const TodayTasksScreen = ({ navigate }) => (
   <ScrollView style={styles.screenContainer} contentContainerStyle={styles.contentPadding}>
     <View style={styles.screenHeader}>
       <Text style={styles.screenTitle}>Today's Tasks</Text>
-      <Text style={styles.dateText}>{"16/09/2025"}</Text>
+      <Text style={styles.dateText}>{localeDate}</Text>
     </View>
 
     <View style={styles.tasksCard}>
       {MOCK_DATA.tasks.map(task => (
         <View key={task.id} style={styles.taskItem}>
           {/* Checkbox implementation for interactive task completion */}
-          <TouchableOpacity style={styles.checkbox} onPress={() => { task.done = !task.done; (targetRerender = !targetRerender); console.log(task); }}>
+          <TouchableOpacity style={styles.checkbox} onPress={() => { task.done = !task.done; }}>
             <Text style={styles.checkboxText}>{task.done === true ? "✔️" : " "}</Text>
           </TouchableOpacity>
           <Text style={styles.taskText}>{task.text}</Text>
         </View>
       ))}
-      <TouchableOpacity style={styles.doneButton}>
+      <TouchableOpacity style={styles.doneButton} onPress={() => markTodosDone(navigate)}>
         <Text style={styles.doneButtonText}>✔️ Done</Text>
       </TouchableOpacity>
     </View>
@@ -540,7 +555,12 @@ const RegisteredHousesScreen = ({ navigate }) => {
   return (
     <ScrollView style={styles.screenContainer} contentContainerStyle={styles.contentPadding}>
       <View style={styles.screenHeader}>
-        <Text style={styles.screenTitle}>Registered Houses</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+          <TouchableOpacity onPress={() => {navigate('Tasks')}} style={styles.backButton}>
+            <MaterialCommunityIcons name="arrow-left" size={24} color="#333" />
+          </TouchableOpacity>
+          <Text style={styles.screenTitle}>Registered Houses</Text>
+        </View>
       </View>
 
       <TouchableOpacity style={styles.addHouseButton}>
@@ -587,16 +607,37 @@ const RegisteredHousesScreen = ({ navigate }) => {
 const HouseDetailsScreen = ({ houseId, navigate }) => {
   const house = MOCK_DATA.houses.find(h => h.id === houseId);
   const member = MOCK_DATA.member;
+  const [searchTerm, setSearchTerm] = useState('');
 
+  const membersOfFam = member.filter((member) => (
+    house.members.some((id) => id === member.id)
+  ));
+
+  const filteredMembers = membersOfFam.filter((member) => 
+    member.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    // member.email.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    member.note.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (searchTerm.toLowerCase().startsWith("m") && member.gender.toLowerCase() === "male") ||
+    (searchTerm.toLowerCase().startsWith("f") && member.gender.toLowerCase() === "female")
+  );
   if (!house) {
     return <View style={styles.screenContainer}><Text style={styles.errorText}>House not found.</Text></View>;
   }
 
-  // console.log(house);
+
   return (
     <ScrollView style={styles.screenContainer} contentContainerStyle={styles.contentPadding}>
+      
       <View style={styles.screenHeader}>
-        <Text style={styles.screenTitle}>House Details</Text>
+
+
+        <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+          <TouchableOpacity onPress={() => {navigate('Houses')}} style={styles.backButton}>
+            <MaterialCommunityIcons name="arrow-left" size={24} color="#333" />
+          </TouchableOpacity>
+          <Text style={styles.screenTitle}>House Details</Text>
+        </View>
+
         <View style={styles.detailHeaderRight}>
           <RiskTag status={house.risk} />
           <Text style={styles.iconTextSmall}>⋮</Text>
@@ -607,15 +648,27 @@ const HouseDetailsScreen = ({ houseId, navigate }) => {
         <Text style={styles.addMemberButtonText} onPress={() => {navigate('AddMember')}}>➕ Add New Member</Text>
       </TouchableOpacity>
 
+      <View style={styles.searchContainer}>
+        <Text style={styles.iconTextSmall}>🔍</Text>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search House"
+          placeholderTextColor="#9CA3AF"
+          value={searchTerm}
+          onChangeText={setSearchTerm}
+        />
+        <Text style={styles.iconTextSmall}>☰</Text>
+      </View>
+
       <HouseSummaryCard house={house} />
 
       {
-        member.map((member) => (
-          house.members.some((id) => id === member.id) ? (
+        filteredMembers.map((member) => (
+          
             <TouchableOpacity onPress={() => {navigate('MemberDetail', {MemberId: member.id});}}>
               <MemberCard key={member.id} member={member} />
             </TouchableOpacity>
-          ) : null
+          
         ))
       }
 
@@ -627,14 +680,16 @@ const HouseDetailsScreen = ({ houseId, navigate }) => {
 
 // --- Main App Component ---
 
-const AddFam = (fam) => {
+const AddFam = (fam, navigate) => {
   MOCK_DATA.houses.push(fam);
+  navigate("Tasks");
 }
 const AddtoFam = (id, famId) => {
   MOCK_DATA.houses.find(h => h.id === famId).members.push(id);
 }
-const AddMem = (mem) => {
+const AddMem = (mem, familyId, navigate) => {
   MOCK_DATA.member.push(mem);
+  navigate('HouseDetails', { houseId: familyId });
 }
 const setMemberData = (mem) => {
   const index = mem.id;
@@ -675,14 +730,18 @@ const App = () => {
         return <AddMember navigate={navigate} addMem={AddMem} familyId={houseId} AddtoFam={AddtoFam} idd={MOCK_DATA.member[MOCK_DATA.member.length-1].id} ></AddMember>;
       case 'MemberDetail':
         return <MemberDetail navigate={navigate} setMemberData={setMemberData} member={MOCK_DATA.member.find(mem => mem.id === MemberId)} familyId={houseId}></MemberDetail>;
+      case "Medicine":
+        return <MedicineScreen navigate={navigate} />;
+      case "Profile":
+        return <Profile navigate={navigate} />;
       default:
-        return <MedicalDetailNewBorn navigate={navigate} />;
+        return <TodayTasksScreen navigate={navigate} />;
     }
   };
 
   return (
     <SafeAreaView style={styles.appContainer}>
-      <AppHeader title="App Title" />
+      <AppHeader title="App Title" navigate={navigate} />
       {/* <View style={{maxWidth:"80%", alignSelf:"center", flex:1, scrollbarWidth: 'none',}}> */}
         {renderScreen()}
       {/* </View> */}
@@ -788,12 +847,16 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#3B82F6',
     marginRight: 10,
-    // textAlign: 'center',
-    // justifyContent: 'center',
-    // alignItems: 'center',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   checkboxText: {
-    fontSize: 24,
+    fontSize: 12,
+    alignContent:"center",
+    textAlign:"center",
+    alignItems:"center",
+    justifyItems:"center",
     color: '#3B82F6',
   },
   taskText: {

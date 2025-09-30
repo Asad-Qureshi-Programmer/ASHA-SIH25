@@ -24,7 +24,7 @@ const DropdownPlaceholder = ({ label, value = 'Select' }) => (
   </View>
 );
 
-const AddFamilyFormScreen = ({idd, familyId, addMem, AddtoFam}) => {
+const AddFamilyFormScreen = ({idd, familyId, addMem, AddtoFam, navigate}) => {
   const [gender, setGender] = useState('Select'); // State for gender
   const [tag, setTag] = useState('Select'); // State for tag
   const [PopUp, setPopUp] = useState(0); 
@@ -37,10 +37,10 @@ const AddFamilyFormScreen = ({idd, familyId, addMem, AddtoFam}) => {
   const [medicalInfo, setMedicalInfo] = useState('');
   // -------------------------------------
 
-  function handleAddMember() {
+  function handleAddMember(navigate) {
     const newMember = data()[0];
     AddtoFam(newMember.id, familyId);
-    addMem(newMember);
+    addMem(newMember, familyId, navigate);
   }
 
   function data(){
@@ -147,7 +147,7 @@ const AddFamilyFormScreen = ({idd, familyId, addMem, AddtoFam}) => {
         </View>
 
         {/* Main Action Button */}
-        <TouchableOpacity style={styles.addButton} onPress={handleAddMember}>
+        <TouchableOpacity style={styles.addButton} onPress={() => handleAddMember(navigate)}>
           <Text style={styles.addButtonText}>Add Member</Text>
           <Feather name="arrow-right" size={20} color="#fff" style={{ marginLeft: 5 }} />
         </TouchableOpacity>

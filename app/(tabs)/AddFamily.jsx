@@ -13,7 +13,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const { width } = Dimensions.get('window');
 
-const AddFamilyScreen = ({AddFam, idd}) => {
+const AddFamilyScreen = ({navigate, AddFam, idd}) => {
   // State variables for form inputs
   const [head, setHead] = useState('');
   const [address, setAddress] = useState('');
@@ -78,7 +78,7 @@ const AddFamilyScreen = ({AddFam, idd}) => {
 
         {/* Main Action Button */}
         <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.addButtonText} onPress={() => AddFam(data())}>Add Family</Text>
+          <Text style={styles.addButtonText} onPress={() => AddFam(data(), navigate)}>Add Family</Text>
           <Feather name="arrow-right" size={20} color="#fff" style={{ marginLeft: 5 }} />
         </TouchableOpacity>
       </View>
