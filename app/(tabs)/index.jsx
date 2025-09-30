@@ -19,7 +19,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 const { width } = Dimensions.get('window');
 import MedicineScreen from './MedicineScreen';
 import Profile from './Profile';
-import VHSNDScreen from './VHSND';
 import Diary from './DiaryScreen';
 import ReportsScreen from './Reports';
 import NotificationsScreen from './Notification';
@@ -750,8 +749,8 @@ const App = () => {
         return <MedicineScreen navigate={navigate} />;
       case "Profile":
         return <Profile navigate={navigate} />;
-      case 'VHSND':
-        return <VHSNDScreen navigate={navigate}></VHSNDScreen>;
+      // case 'VHSND':
+      //   return <VHSNDScreen navigate={navigate}></VHSNDScreen>;
       case 'ASHADIARY':
         return <Diary navigate={navigate}></Diary>;
       case 'Reports':
@@ -796,6 +795,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 15,
+    paddingTop:50,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
     backgroundColor: '#FFF',
