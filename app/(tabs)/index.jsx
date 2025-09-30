@@ -21,6 +21,9 @@ import MedicineScreen from './MedicineScreen';
 import Profile from './Profile';
 import VHSNDScreen from './VHSND';
 import Diary from './DiaryScreen';
+import ReportsScreen from './Reports';
+import NotificationsScreen from './Notification';
+import SettingsScreen from './Settings';
 
 let targetRerender = false;
 // --- Mock Data Structure ---
@@ -540,7 +543,7 @@ const TodayTasksScreen = ({ navigate }) => (
       <TaskGridButton icon="👨‍👩‍👧‍👦" text="VHSND" onPress={() => { navigate('VHSND')}} />
       <TaskGridButton icon="💉" text="Medicine" onPress={() => { navigate('Medicine')}} />
       <TaskGridButton icon="📘" text="ASHA Diary" onPress={() => { navigate('ASHADIARY')}} />
-      <TaskGridButton icon="📈" text="Reports" onPress={() => { navigate('Reposts')}} />
+      <TaskGridButton icon="📈" text="Reports" onPress={() => { navigate('Reports')}} />
     </View>
 
   </ScrollView>
@@ -740,6 +743,12 @@ const App = () => {
         return <VHSNDScreen navigate={navigate}></VHSNDScreen>;
       case 'ASHADIARY':
         return <Diary navigate={navigate}></Diary>;
+      case 'Reports':
+        return <ReportsScreen navigate={navigate}></ReportsScreen>;
+      case 'Alerts':
+        return <NotificationsScreen navigate={navigate}></NotificationsScreen>;
+      case 'Settings':
+        return <SettingsScreen navigate={navigate}></SettingsScreen>;
       default:
         return <TodayTasksScreen navigate={navigate} />;
     }
