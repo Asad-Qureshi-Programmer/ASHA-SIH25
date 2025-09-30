@@ -20,6 +20,7 @@ const { width } = Dimensions.get('window');
 import MedicineScreen from './MedicineScreen';
 import Profile from './Profile';
 import VHSNDScreen from './VHSND';
+import Diary from './DiaryScreen';
 
 let targetRerender = false;
 // --- Mock Data Structure ---
@@ -474,7 +475,7 @@ const BottomTabs = ({ activeTab, setTab }) => {
   const tabs = [
     { name: 'Home', icon: '🏠', screen: 'Tasks' },
     { name: 'List', icon: '📝', screen: 'Houses' },
-    { name: 'Add', icon: '➕', screen: 'Add', large: true },
+    { name: 'Add', icon: '➕', screen: 'AddFamily', large: true },
     { name: 'Alerts', icon: '🔔', screen: 'Alerts' },
     { name: 'Settings', icon: '⚙️', screen: 'Settings' },
   ];
@@ -737,6 +738,8 @@ const App = () => {
         return <Profile navigate={navigate} />;
       case 'VHSND':
         return <VHSNDScreen navigate={navigate}></VHSNDScreen>;
+      case 'ASHADIARY':
+        return <Diary navigate={navigate}></Diary>;
       default:
         return <TodayTasksScreen navigate={navigate} />;
     }
@@ -748,7 +751,7 @@ const App = () => {
       {/* <View style={{maxWidth:"80%", alignSelf:"center", flex:1, scrollbarWidth: 'none',}}> */}
         {renderScreen()}
       {/* </View> */}
-      <BottomTabs activeTab={activeTab} setTab={(tab) => { setActiveTab(tab); navigate(tab === 'List' ? 'Houses' : tab === 'Add' ? 'AddFamily' : 'Tasks'); }} />
+      <BottomTabs activeTab={activeTab} setTab={(tab) => { setActiveTab(tab); navigate(tab); }} />
       {/* <View style={{width:"100%", height:"50px", backgroundColor:"#fff"}}></View> */}
     </SafeAreaView>
   );
