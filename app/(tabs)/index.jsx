@@ -1,3 +1,6 @@
+import 'react-native-gesture-handler';
+// Must be line 1 or 2
+// import React from 'react'; 
 import React, { useState } from 'react';
 import {
   SafeAreaView,
@@ -9,21 +12,20 @@ import {
   TextInput,
   Dimensions,
 } from 'react-native';
-import { ta } from 'zod/v4/locales';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import AddFamily from './AddFamily';
 import AddMember from './Addmember';
 import MemberDetail from './MemberDetail'
-import MedicalDetailNewBorn from './../../components/MedicalNewbornForm';
-import { set } from 'zod/v4';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-const { width } = Dimensions.get('window');
 import MedicineScreen from './MedicineScreen';
 import Profile from './Profile';
 import Diary from './DiaryScreen';
 import ReportsScreen from './Reports';
 import NotificationsScreen from './Notification';
 import SettingsScreen from './Settings';
-import VoiceToTextMicrophone from './VoiceToTextMic';
+
+const { width } = Dimensions.get('window');
+
 // import VHSNDScreen from './VHSND';
 let targetRerender = false;
 // --- Mock Data Structure ---
@@ -351,9 +353,7 @@ const AppHeader = ({ title, navigate }) => (
   <View style={styles.header}>
     <Text style={styles.logo}>LOGO</Text>
     <View style={styles.headerIcons}>
-      <View style={styles.userIconWrapper}>
-        <VoiceToTextMicrophone></VoiceToTextMicrophone>
-      </View>
+      
       <Text style={styles.iconText}>अ</Text>
       <View style={styles.userIconWrapper}>
         <Text style={styles.iconText} onPress={() => navigate("Profile")}>👤</Text>
