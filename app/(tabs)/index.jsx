@@ -27,9 +27,6 @@ import SettingsScreen from './Settings';
 import VHSNDScreen from './Vhsnd';
 
 import ASHA_LOGO from './../../assets/images/LOGO.png'; 
-import HomeVisit1 from './HomeVisit';
-import HomeVisit2Voice from './HomeVisit2Voice'
-import HomeVisit3Form from './HomeVisit3Form';
 
 const { width } = Dimensions.get('window');
 
@@ -39,6 +36,10 @@ const [MOCK_DATA, setMockData] = useState({
   tasks: [
     { id: 1, text: "3 children due for immunization.", done: false },
     { id: 2, text: "2 ANC visits due", done: false },
+    { id: 3, text: "5 adolescent girls due for weekly IFA.", done: false },
+    { id: 4, text: "Follow-up visit for high-risk pregnant woman (House 121003).", done: false },
+    { id: 5, text: "Conduct post-natal checkup for Meena Devi's infant.", done: false },
+    { id: 6, text: "Prepare and submit monthly report data to supervisor.", done: false },
   ],
   member: [
     // 1. Sunita Kumar (Pregnant, Early Stage)
@@ -284,6 +285,294 @@ const [MOCK_DATA, setMockData] = useState({
       orsPackets: 0,
       paracetamol: 0,
       dewormingTablets: 0,
+    },// 8. Kavita Singh (Pregnant Woman, Mid-stage)
+    {
+      id: 8,
+      name: "Kavita Singh",
+      age: 29,
+      gender: "Female",
+      role: "Wife",
+      status: "Pregnant",
+      note: "Entering third trimester. TT2 due this week.",
+      medicalInfo: "2/5 ANC Visits done. 1/2 TT Vaccine Done. 60/100 IFA Tablets delivered. Complaint: Mild leg cramps.",
+      ancDone: 2, 
+      tt1: true,
+      tt2: false,
+      booster: false,
+      tbSymptomChecked: true,
+      nutritionCounselling: true,
+      vhsndParticipationDone: true,
+      weight: '62',
+      bp: '115/75',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'Advised daily calcium intake.',
+      ifaTablets: 40,
+      zincTablets: 0,
+      calciumTablets: 30,
+      orsPackets: 0,
+      paracetamol: 0,
+      dewormingTablets: 0,
+    },
+    
+    // 9. Deepak Patel (Infant, 6 months)
+    {
+      id: 9,
+      name: "Deepak Patel",
+      age: 0, // Age in years (0 means < 1 year)
+      gender: "Male",
+      role: "Son",
+      status: "Infant",
+      note: "Due for Vitamin A dose. Checked weight.",
+      medicalInfo: "Immunization up-to-date (6 months). Growth chart steady. Danger Signs: N/A. Provided Zinc for mild loose motion history.",
+      ancDone: 0, 
+      tt1: false,
+      tt2: false,
+      booster: false,
+      tbSymptomChecked: false,
+      nutritionCounselling: true,
+      vhsndParticipationDone: true,
+      weight: '7.5',
+      bp: 'N/A',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'Counselled mother on complementary feeding.',
+      ifaTablets: 0,
+      zincTablets: 7,
+      calciumTablets: 0,
+      orsPackets: 0,
+      paracetamol: 0,
+      dewormingTablets: 0,
+    },
+
+    // 10. Shanti Devi (Senior Citizen, Hypertension)
+    {
+      id: 10,
+      name: "Shanti Devi",
+      age: 68,
+      gender: "Female",
+      role: "Mother",
+      status: "Chronic",
+      note: "Follow-up required for high BP readings.",
+      medicalInfo: "Referred to PHC for severe hypertension (BP: 150/100). Received pain relief medication.",
+      ancDone: 0, 
+      tt1: false,
+      tt2: false,
+      booster: false,
+      tbSymptomChecked: true,
+      nutritionCounselling: false,
+      vhsndParticipationDone: false,
+      weight: '70',
+      bp: '150/100',
+      dangerSigns: 'Occasional dizziness.',
+      otherMedicalInfo: 'Counseled on salt restriction.',
+      ifaTablets: 0,
+      zincTablets: 0,
+      calciumTablets: 20,
+      orsPackets: 0,
+      paracetamol: 10,
+      dewormingTablets: 0,
+    },
+
+    // 11. Vijay Sharma (Male, Eligible Couple)
+    {
+      id: 11,
+      name: "Vijay Sharma",
+      age: 32,
+      gender: "Male",
+      role: "Husband",
+      status: "Eligible Couple",
+      note: "Counseled on family planning.",
+      medicalInfo: "General checkup normal. Counselled on spacing methods. TT Vaccine status: Complete.",
+      ancDone: 0, 
+      tt1: true,
+      tt2: true,
+      booster: true,
+      tbSymptomChecked: true,
+      nutritionCounselling: true,
+      vhsndParticipationDone: false,
+      weight: '78',
+      bp: '125/85',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'No health issues reported.',
+      ifaTablets: 0,
+      zincTablets: 0,
+      calciumTablets: 0,
+      orsPackets: 0,
+      paracetamol: 0,
+      dewormingTablets: 0,
+    },
+
+    // 12. Pooja Verma (Adolescent Girl, Anemia)
+    {
+      id: 12,
+      name: "Pooja Verma",
+      age: 17,
+      gender: "Female",
+      role: "Daughter",
+      status: "Adolescent",
+      note: "Looks pale; started high-dose weekly IFA.",
+      medicalInfo: "Received 8 weeks of weekly IFA. Counselled on nutrition. Deworming done.",
+      ancDone: 0, 
+      tt1: false,
+      tt2: false,
+      booster: false,
+      tbSymptomChecked: true,
+      nutritionCounselling: true,
+      vhsndParticipationDone: true,
+      weight: '45',
+      bp: '105/65',
+      dangerSigns: 'Mild pallor observed.',
+      otherMedicalInfo: 'Next hemoglobin check due in 3 months.',
+      ifaTablets: 28, // Weekly supply
+      zincTablets: 0,
+      calciumTablets: 0,
+      orsPackets: 0,
+      paracetamol: 0,
+      dewormingTablets: 1,
+    },
+
+    // 13. Ashok Kumar (Child, Diarrhoea Follow-up)
+    {
+      id: 13,
+      name: "Ashok Kumar",
+      age: 4,
+      gender: "Male",
+      role: "Son",
+      status: "Child",
+      note: "Recovering from moderate diarrhea.",
+      medicalInfo: "Completed 14-day Zinc course. Dehydration signs resolved. Advised hygiene practices.",
+      ancDone: 0, 
+      tt1: false,
+      tt2: false,
+      booster: false,
+      tbSymptomChecked: false,
+      nutritionCounselling: true,
+      vhsndParticipationDone: true,
+      weight: '16',
+      bp: 'N/A',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'Weight stable. Continued counseling on fluids.',
+      ifaTablets: 0,
+      zincTablets: 0, // Course completed
+      calciumTablets: 0,
+      orsPackets: 2, // Stock provided
+      paracetamol: 0,
+      dewormingTablets: 0,
+    },
+
+    // 14. Suresh Yadav (Male, TB Symptom Check)
+    {
+      id: 14,
+      name: "Suresh Yadav",
+      age: 55,
+      gender: "Male",
+      role: "Father",
+      status: "Normal",
+      note: "Chronic cough, referred for sputum test.",
+      medicalInfo: "TB symptom check positive for persistent cough. Referred to PHC for investigation. Normal BP.",
+      ancDone: 0, 
+      tt1: false,
+      tt2: false,
+      booster: false,
+      tbSymptomChecked: false, // Will be checked at PHC
+      nutritionCounselling: false,
+      vhsndParticipationDone: false,
+      weight: '72',
+      bp: '130/85',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'Sputum sample collection advised.',
+      ifaTablets: 0,
+      zincTablets: 0,
+      calciumTablets: 0,
+      orsPackets: 0,
+      paracetamol: 0,
+      dewormingTablets: 0,
+    },
+
+    // 15. Radha Kumari (Lactating Mother, Post-Partum)
+    {
+      id: 15,
+      name: "Radha Kumari",
+      age: 26,
+      gender: "Female",
+      role: "Wife",
+      status: "Lactating",
+      note: "Child is 8 months old. Continuing calcium and IFA.",
+      medicalInfo: "ANC/TT status complete. Continuing post-partum supplement distribution. Healthy infant.",
+      ancDone: 5, 
+      tt1: true,
+      tt2: true,
+      booster: true,
+      tbSymptomChecked: true,
+      nutritionCounselling: true,
+      vhsndParticipationDone: true,
+      weight: '53',
+      bp: '110/70',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'No issues. Next family planning counselling due.',
+      ifaTablets: 30,
+      zincTablets: 0,
+      calciumTablets: 30,
+      orsPackets: 0,
+      paracetamol: 0,
+      dewormingTablets: 0,
+    },
+
+    // 16. Chhavi Sahu (Infant, 3 months)
+    {
+      id: 16,
+      name: "Chhavi Sahu",
+      age: 0,
+      gender: "Female",
+      role: "Daughter",
+      status: "Infant",
+      note: "Due for routine immunization next month.",
+      medicalInfo: "Immunization complete up to 10 weeks. Growth on track. Maternal counselling provided.",
+      ancDone: 0, 
+      tt1: false,
+      tt2: false,
+      booster: false,
+      tbSymptomChecked: false,
+      nutritionCounselling: true,
+      vhsndParticipationDone: true,
+      weight: '5.5',
+      bp: 'N/A',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'Mother advised on exclusive breastfeeding.',
+      ifaTablets: 0,
+      zincTablets: 0,
+      calciumTablets: 0,
+      orsPackets: 0,
+      paracetamol: 0,
+      dewormingTablets: 0,
+    },
+
+    // 17. Ramesh Gupta (Male, General Health)
+    {
+      id: 17,
+      name: "Ramesh Gupta",
+      age: 50,
+      gender: "Male",
+      role: "Head",
+      status: "Normal",
+      note: "Routine health checkup.",
+      medicalInfo: "BP slightly elevated (130/90). Advised follow-up and reduced salt intake. Deworming tablets given.",
+      ancDone: 0, 
+      tt1: true,
+      tt2: true,
+      booster: true,
+      tbSymptomChecked: true,
+      nutritionCounselling: true,
+      vhsndParticipationDone: false,
+      weight: '80',
+      bp: '130/90',
+      dangerSigns: 'N/A',
+      otherMedicalInfo: 'Deworming dose provided.',
+      ifaTablets: 0,
+      zincTablets: 0,
+      calciumTablets: 0,
+      orsPackets: 0,
+      paracetamol: 0,
+      dewormingTablets: 1,
     },
   ],
   // console.log(memberDataExamples
@@ -348,6 +637,68 @@ const [MOCK_DATA, setMockData] = useState({
         { date: "25/09/2025", text: "Vaccination of Shivam Kumar Done" },
         { date: "25/09/2025", text: "ANC Visit for Sunita Kumar" },
         { date: "05/09/2025", text: "Drop given to Shivam" },
+      ],
+    },{
+      id: 121006,
+      head: "House 5 Ward 8",
+      address: "Shivaji Nagar, Sector A, Bhopal MP",
+      risk: "Chronic",
+      highCareCount: 2, // e.g., one Chronic and one High-Risk Child
+      lastVisit: "01/10/2025",
+      pregnantWomen: 0,
+      eligibleCouples: 1,
+      newbornChildren: 0,
+      childrenUnder5: 1,
+      members: [
+        8, 9, 10
+      ],
+      membersCount: 3,
+      history: [
+        { date: "01/10/2025", text: "BP check for Head of Household; advised diet changes." },
+        { date: "25/09/2025", text: "Immunization catch-up done for child, Kavya." },
+        { date: "15/09/2025", text: "Tuberculosis screening completed." },
+      ],
+    },
+    {
+      id: 121007,
+      head: "House 22 Ward 9",
+      address: "Gandhi Colony, Near PHC, Indore MP",
+      risk: "Antenatal",
+      highCareCount: 1, // Only the pregnant woman
+      lastVisit: "03/10/2025",
+      pregnantWomen: 1,
+      eligibleCouples: 1,
+      newbornChildren: 0,
+      childrenUnder5: 0,
+      members: [
+        11, 12
+      ],
+      membersCount: 2,
+      history: [
+        { date: "03/10/2025", text: "First ANC visit (3 months pregnant); IFA distributed." },
+        { date: "01/10/2025", text: "TT1 administered to pregnant woman, Priya Sharma." },
+        { date: "10/09/2025", text: "Household survey and registration completed." },
+      ],
+    },
+    {
+      id: 121008,
+      head: "House 15 Ward 1",
+      address: "Railway Quarters, Ujjain MP",
+      risk: "Vaccination",
+      highCareCount: 1, // The infant
+      lastVisit: "30/09/2025",
+      pregnantWomen: 0,
+      eligibleCouples: 2,
+      newbornChildren: 1,
+      childrenUnder5: 1,
+      members: [
+        13, 14, 15, 16, 17
+      ],
+      membersCount: 4,
+      history: [
+        { date: "30/09/2025", text: "Newborn immunization reminder issued." },
+        { date: "28/09/2025", text: "Counselling given regarding newborn feeding practices." },
+        { date: "20/09/2025", text: "ORS distributed for an elder child's mild diarrhea." },
       ],
     },
   ],
@@ -556,8 +907,7 @@ const TodayTasksScreen = ({ navigate }) => (
     </View>
 
     <View style={styles.gridContainer}>
-      {/* <TaskGridButton icon="🏠" text="Start Home Visit" onPress={() => navigate('HouseDetails', { houseId: MOCK_DATA.houses[0].id })} /> */}
-      <TaskGridButton icon="🏠" text="Start Home Visit" onPress={() => navigate('HomeVisit1')} />
+      <TaskGridButton icon="🏠" text="Start Home Visit" onPress={() => navigate('HouseDetails', { houseId: MOCK_DATA.houses[0].id })} />
       <TaskGridButton icon="✏️" text="Add/Update House Details" onPress={() => navigate('Houses')} />
       <TaskGridButton icon="👨‍👩‍👧‍👦" text="VHSND" onPress={() => { navigate('VHSND')}} />
       <TaskGridButton icon="💉" text="Medicine" onPress={() => { navigate('Medicine')}} />
@@ -775,24 +1125,6 @@ const App = () => {
         return <NotificationsScreen navigate={navigate}></NotificationsScreen>;
       case 'Settings':
         return <SettingsScreen navigate={navigate}></SettingsScreen>;
-      case 'HomeVisit1':
-        return <HomeVisit1 navigate={navigate} MOCK_DATA={MOCK_DATA}></HomeVisit1>;
-      case "HomeVisit2Voice":
-  return (
-    <HomeVisit2Voice
-      navigate={navigate}
-      MOCK_DATA={MOCK_DATA}
-      houseId={houseId} // <- Pass the houseId here
-    />
-  );
-      case "HomeVisit3Form":
-  return (
-    <HomeVisit3Form
-      navigate={navigate}
-      MOCK_DATA={MOCK_DATA}
-      houseId={houseId} // <- Pass the houseId here
-    />
-  );
       default:
         return <TodayTasksScreen navigate={navigate} />;
     }
