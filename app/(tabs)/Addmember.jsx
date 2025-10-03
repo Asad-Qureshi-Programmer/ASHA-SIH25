@@ -97,7 +97,7 @@ const AddFamilyFormScreen = ({idd, familyId, addMem, AddtoFam, navigate}) => {
             <TouchableOpacity onPress={() => setPopUp(!PopUp)}>
               <DropdownPlaceholder value={gender} />
             </TouchableOpacity>
-            {PopUp && (
+            <View style={PopUp ? {} : {display:"none"}}>
               <View style={styles.dropdownOptions}>
                 <TouchableOpacity onPress={() => { setGender("Male"); setPopUp(false); }}>
                   <Text style={styles.dropdownOptionText}>Male</Text>
@@ -106,7 +106,8 @@ const AddFamilyFormScreen = ({idd, familyId, addMem, AddtoFam, navigate}) => {
                   <Text style={styles.dropdownOptionText}>Female</Text>
                 </TouchableOpacity>
               </View>
-            )}
+            </View>
+            
           </View>
         </View> 
 
