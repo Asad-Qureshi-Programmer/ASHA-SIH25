@@ -18,9 +18,9 @@ const { width } = Dimensions.get('window');
 
 // --- DEMO DATA FOR REGISTERS ---
 const demoRegisters = [
-  { id: 1, title: 'Pregnant Women Register (R-1)', icon: 'account-woman', count: 18, color: '#0056b3' },
+  { id: 1, title: 'Pregnant Women Register (R-1)', icon: 'mother-heart', count: 18, color: '#0056b3' },
   { id: 2, title: 'Infant Register (0-1 Year)', icon: 'baby-carriage', count: 12, color: '#28A745' },
-  { id: 3, title: 'Children Under 5 Register (R-3)', icon: 'child-friendly', count: 45, color: '#FFC107' },
+  { id: 3, title: 'Children Under 5 Register (R-3)', icon: 'human-child', count: 45, color: '#FFC107' },
   { id: 4, title: 'Eligible Couples Register (R-4)', icon: 'human-male-female', count: 78, color: '#E74C3C' },
   { id: 5, title: 'Births & Deaths Register', icon: 'clipboard-list-outline', count: 5, color: '#8E44AD' },
   { id: 6, title: 'Activity Summary & Reporting', icon: 'file-chart-outline', count: 2, color: '#1E90FF' },
