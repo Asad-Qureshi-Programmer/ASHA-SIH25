@@ -26,7 +26,7 @@ export default function TabLayout() {
           backgroundColor: '#FFFFFF', // Light background for the bar
           height: 0,
           maxHeight: 0,
-          marginTop:40,
+          // marginTop:40,
         },
         
       }}

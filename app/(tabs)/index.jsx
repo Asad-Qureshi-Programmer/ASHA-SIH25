@@ -766,11 +766,17 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.appContainer}>
-      <AppHeader title="App Title" navigate={navigate} />
+      {
+        currentScreen == "Settings" ||
+        <AppHeader title="App Title" navigate={navigate} />
+      }
       {/* <View style={{maxWidth:"80%", alignSelf:"center", flex:1, scrollbarWidth: 'none',}}> */}
         {renderScreen()}
       {/* </View> */}
-      <BottomTabs activeTab={activeTab} setTab={(tab) => { setActiveTab(tab); navigate(tab); }} />
+      {
+        currentScreen == "Settings" ||
+        <BottomTabs activeTab={activeTab} setTab={(tab) => { setActiveTab(tab); navigate(tab); }} />
+      }
       {/* <View style={{width:"100%", height:"50px", backgroundColor:"#fff"}}></View> */}
     </SafeAreaView>
   );
