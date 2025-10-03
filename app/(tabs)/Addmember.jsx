@@ -62,7 +62,10 @@ const AddFamilyFormScreen = ({idd, familyId, addMem, AddtoFam, navigate}) => {
       {/* -------------------- Content Area -------------------- */}
       <View style={styles.content}>
         <View style={styles.titleContainer}>
-          <MaterialCommunityIcons name="message-text-outline" size={24} color="#000" />
+          <TouchableOpacity key={familyId} onPress={() => navigate('HouseDetails', { houseId: familyId })}>
+            <MaterialCommunityIcons name="arrow-left" size={24} color="#333" />
+          </TouchableOpacity>
+          {/* <MaterialCommunityIcons name="message-text-outline" size={24} color="#000" /> */}
           <Text style={styles.titleText}>Add New Membr</Text>
         </View>
 
@@ -148,7 +151,7 @@ const AddFamilyFormScreen = ({idd, familyId, addMem, AddtoFam, navigate}) => {
         </View>
 
         {/* Main Action Button */}
-        <TouchableOpacity style={styles.addButton} onPress={() => handleAddMember(navigate)}>
+        <TouchableOpacity style={styles.addButton} onPress={() => {if(name.trim() !== "" && gender != "Select")handleAddMember(navigate)}}>
           <Text style={styles.addButtonText}>Add Member</Text>
           <Feather name="arrow-right" size={20} color="#fff" style={{ marginLeft: 5 }} />
         </TouchableOpacity>
@@ -177,6 +180,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     color: '#000',
+  },
+  houseListItem: {
+    backgroundColor: '#FFF',
+    padding: 15,
+    borderRadius: 10,
+    borderBottomWidth: 5,
+    borderTopWidth: 2,
+    // marginVertical:5,
+    marginBottom: 17,
+    borderBottomColor: '#efefef',
+    borderTopColor: '#efefef',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 1,
+    elevation: 1,
   },
   headerIcons: {
     flexDirection: 'row',
