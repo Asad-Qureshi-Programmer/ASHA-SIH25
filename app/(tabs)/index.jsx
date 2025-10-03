@@ -26,7 +26,7 @@ import SettingsScreen from './Settings';
 
 const { width } = Dimensions.get('window');
 
-// import VHSNDScreen from './VHSND';
+import VHSNDScreen from './Vhsnd';
 let targetRerender = false;
 // --- Mock Data Structure ---
 const [MOCK_DATA, setMockData] = useState({
@@ -749,8 +749,8 @@ const App = () => {
         return <MedicineScreen navigate={navigate} />;
       case "Profile":
         return <Profile navigate={navigate} />;
-      // case 'VHSND':
-      //   return <VHSNDScreen navigate={navigate}></VHSNDScreen>;
+      case 'VHSND':
+        return <VHSNDScreen navigate={navigate}></VHSNDScreen>;
       case 'ASHADIARY':
         return <Diary navigate={navigate}></Diary>;
       case 'Reports':
