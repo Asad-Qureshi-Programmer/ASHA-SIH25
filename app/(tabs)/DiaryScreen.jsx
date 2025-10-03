@@ -71,12 +71,12 @@ const ASHADiaryScreen = ({navigate}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
+            <View key={1} style={styles.header}>
                 <TouchableOpacity onPress={() => navigate("Tasks")} style={styles.headerIconContainer}>
                     <MaterialCommunityIcons name="arrow-left" size={24} color="#333" />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>ASHA Diary & Registers</Text>
-                <View style={styles.headerIconContainer} /> {/* Spacer */}
+                <View style={styles.headerIconContainer} />
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent}>

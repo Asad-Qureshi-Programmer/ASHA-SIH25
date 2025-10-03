@@ -636,7 +636,7 @@ const HouseDetailsScreen = ({ houseId, navigate }) => {
   return (
     <ScrollView style={styles.screenContainer} contentContainerStyle={styles.contentPadding}>
       
-      <View style={styles.screenHeader}>
+      <View key={1} style={styles.screenHeader}>
 
 
         <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
@@ -671,9 +671,9 @@ const HouseDetailsScreen = ({ houseId, navigate }) => {
       <HouseSummaryCard house={house} />
 
       {
-        filteredMembers.map((member) => (
+        filteredMembers.map((member, i) => (
           
-            <TouchableOpacity onPress={() => {navigate('MemberDetail', {MemberId: member.id});}}>
+            <TouchableOpacity key={i} onPress={() => {navigate('MemberDetail', {MemberId: member.id});}}>
               <MemberCard key={member.id} member={member} />
             </TouchableOpacity>
           

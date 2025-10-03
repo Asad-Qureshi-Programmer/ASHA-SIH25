@@ -25,7 +25,10 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: '#FFFFFF', // Light background for the bar
           height: 0,
+          maxHeight: 0,
+          marginTop:40,
         },
+        
       }}
     >
       {/* 1. Correct Tab Entry Point (Points to app/(tabs)/index.jsx) */}
