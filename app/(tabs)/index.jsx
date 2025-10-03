@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   TextInput,
   Dimensions,
+  Image
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -23,13 +24,15 @@ import Diary from './DiaryScreen';
 import ReportsScreen from './Reports';
 import NotificationsScreen from './Notification';
 import SettingsScreen from './Settings';
+import VHSNDScreen from './Vhsnd';
+
+import ASHA_LOGO from './../../assets/images/LOGO.png'; 
 import HomeVisit1 from './HomeVisit';
 import HomeVisit2Voice from './HomeVisit2Voice'
 import HomeVisit3Form from './HomeVisit3Form';
 
 const { width } = Dimensions.get('window');
 
-// import VHSNDScreen from './VHSND';
 let targetRerender = false;
 // --- Mock Data Structure ---
 const [MOCK_DATA, setMockData] = useState({
@@ -354,7 +357,16 @@ const [MOCK_DATA, setMockData] = useState({
 
 const AppHeader = ({ title, navigate }) => (
   <View style={styles.header}>
-    <Text style={styles.logo}>LOGO</Text>
+    <TouchableOpacity onPress={() => navigate("Tasks")}>
+      <View style={styles.logoContainer} onPress={() => navigate("Tasks")}>
+        <Image 
+          source={ASHA_LOGO} 
+          style={{width:"50", height:"50", margin:"8"}}
+          resizeMode="contain" 
+          />
+        <Text style={styles.logoText}>AshaCare</Text>
+      </View>
+    </TouchableOpacity>
     <View style={styles.headerIcons}>
       
       <Text style={styles.iconText}>अ</Text>
@@ -753,8 +765,8 @@ const App = () => {
         return <MedicineScreen navigate={navigate} />;
       case "Profile":
         return <Profile navigate={navigate} />;
-      // case 'VHSND':
-      //   return <VHSNDScreen navigate={navigate}></VHSNDScreen>;
+      case 'VHSND':
+        return <VHSNDScreen navigate={navigate}></VHSNDScreen>;
       case 'ASHADIARY':
         return <Diary navigate={navigate}></Diary>;
       case 'Reports':
@@ -788,11 +800,17 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.appContainer}>
-      <AppHeader title="App Title" navigate={navigate} />
+      {
+        currentScreen == "Settings" ||
+        <AppHeader title="App Title" navigate={navigate} />
+      }
       {/* <View style={{maxWidth:"80%", alignSelf:"center", flex:1, scrollbarWidth: 'none',}}> */}
         {renderScreen()}
       {/* </View> */}
-      <BottomTabs activeTab={activeTab} setTab={(tab) => { setActiveTab(tab); navigate(tab); }} />
+      {
+        currentScreen == "Settings" ||
+        <BottomTabs activeTab={activeTab} setTab={(tab) => { setActiveTab(tab); navigate(tab); }} />
+      }
       {/* <View style={{width:"100%", height:"50px", backgroundColor:"#fff"}}></View> */}
     </SafeAreaView>
   );
@@ -803,6 +821,14 @@ const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
     backgroundColor: '#F7F8FC',
+  },
+  logoContainer:{
+    display: "flex",
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoText:{
+    fontSize: 20,
   },
   screenContainer: {
     flex: 1,

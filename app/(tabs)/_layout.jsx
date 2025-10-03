@@ -23,10 +23,10 @@ export default function TabLayout() {
         tabBarInactiveTintColor: '#888888',
         tabBarShowLabel: false, // <-- Hides the text label on the tab bar
         tabBarStyle: {
-          backgroundColor: '#FFFFFF', // Light background for the bar
+          backgroundColor: '#000000', // Light background for the bar
           height: 0,
           maxHeight: 0,
-          marginTop:40,
+          // marginTop:40,
         },
         
       }}

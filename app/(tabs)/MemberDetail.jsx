@@ -133,7 +133,7 @@ const MemberDetailsScreen = ({ navigate, member, familyId, setMemberData }) => {
   // Placeholder for navigation logic
   const handleBack = () => {
     navigate('HouseDetails', { houseId: familyId });
-    Alert.alert("Back Navigation", "Implement navigation back to House Details.");
+    // Alert.alert("Back Navigation", "Implement navigation back to House Details.");
   };
   
   // Placeholder for saving changes

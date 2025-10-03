@@ -258,7 +258,7 @@ const ASHAProfileScreen = ({ navigate }) => {
                 <InfoCard title="Performance (Current Month)">
                     <View style={styles.metricsGrid}>
                         <MetricBox 
-                            Icon={IconWrapper('calendar-check', Feather)} 
+                            Icon={IconWrapper('calendar', Feather)} 
                             label="Visits Completed" 
                             value={workerData.performance.monthlyVisits} 
                             color="#1E90FF" 

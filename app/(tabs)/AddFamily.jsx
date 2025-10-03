@@ -21,8 +21,8 @@ const AddFamilyScreen = ({navigate, AddFam, idd}) => {
   function data(){
     let fam = {
       id: idd+1,
-      head: head, // Use state variable
-      address: address, // Use state variable
+      head: head,
+      address: address, 
       risk: "",
       membersCount: 0,
       highCareCount: 0,
@@ -44,7 +44,10 @@ const AddFamilyScreen = ({navigate, AddFam, idd}) => {
       {/* -------------------- Content Area -------------------- */}
       <View style={styles.content}>
         <View style={styles.titleContainer}>
-          <MaterialCommunityIcons name="message-text-outline" size={24} color="#000" />
+          {/* <MaterialCommunityIcons name="message-text-outline" size={24} color="#000" /> */}
+          <TouchableOpacity onPress={() => {navigate('Houses')}} style={styles.backButton}>
+            <MaterialCommunityIcons name="arrow-left" size={24} color="#333" />
+          </TouchableOpacity>
           <Text style={styles.titleText}>Add Family</Text>
         </View>
         
@@ -78,7 +81,7 @@ const AddFamilyScreen = ({navigate, AddFam, idd}) => {
 
         {/* Main Action Button */}
         <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.addButtonText} onPress={() => AddFam(data(), navigate)}>Add Family</Text>
+          <Text style={styles.addButtonText} onPress={() => {if(head.trim() !== "" && address.trim() !== "") AddFam(data(), navigate)}}>Add Family</Text>
           <Feather name="arrow-right" size={20} color="#fff" style={{ marginLeft: 5 }} />
         </TouchableOpacity>
       </View>
