@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   TextInput,
   Dimensions,
+  Image
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -23,10 +24,12 @@ import Diary from './DiaryScreen';
 import ReportsScreen from './Reports';
 import NotificationsScreen from './Notification';
 import SettingsScreen from './Settings';
+import VHSNDScreen from './Vhsnd';
+
+import ASHA_LOGO from './../../assets/images/LOGO.png'; 
 
 const { width } = Dimensions.get('window');
 
-import VHSNDScreen from './Vhsnd';
 let targetRerender = false;
 // --- Mock Data Structure ---
 const [MOCK_DATA, setMockData] = useState({
@@ -351,7 +354,16 @@ const [MOCK_DATA, setMockData] = useState({
 
 const AppHeader = ({ title, navigate }) => (
   <View style={styles.header}>
-    <Text style={styles.logo}>LOGO</Text>
+    <TouchableOpacity onPress={() => navigate("Tasks")}>
+      <View style={styles.logoContainer} onPress={() => navigate("Tasks")}>
+        <Image 
+          source={ASHA_LOGO} 
+          style={{width:"50", height:"50", margin:"8"}}
+          resizeMode="contain" 
+          />
+        <Text style={styles.logoText}>AshaCare</Text>
+      </View>
+    </TouchableOpacity>
     <View style={styles.headerIcons}>
       
       <Text style={styles.iconText}>अ</Text>
@@ -787,6 +799,14 @@ const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
     backgroundColor: '#F7F8FC',
+  },
+  logoContainer:{
+    display: "flex",
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoText:{
+    fontSize: 20,
   },
   screenContainer: {
     flex: 1,
