@@ -27,6 +27,9 @@ import SettingsScreen from './Settings';
 import VHSNDScreen from './Vhsnd';
 
 import ASHA_LOGO from './../../assets/images/LOGO.png'; 
+import HomeVisit1 from './HomeVisit';
+import HomeVisit2Voice from './HomeVisit2Voice'
+import HomeVisit3Form from './HomeVisit3Form';
 
 const { width } = Dimensions.get('window');
 
@@ -553,7 +556,8 @@ const TodayTasksScreen = ({ navigate }) => (
     </View>
 
     <View style={styles.gridContainer}>
-      <TaskGridButton icon="🏠" text="Start Home Visit" onPress={() => navigate('HouseDetails', { houseId: MOCK_DATA.houses[0].id })} />
+      {/* <TaskGridButton icon="🏠" text="Start Home Visit" onPress={() => navigate('HouseDetails', { houseId: MOCK_DATA.houses[0].id })} /> */}
+      <TaskGridButton icon="🏠" text="Start Home Visit" onPress={() => navigate('HomeVisit1')} />
       <TaskGridButton icon="✏️" text="Add/Update House Details" onPress={() => navigate('Houses')} />
       <TaskGridButton icon="👨‍👩‍👧‍👦" text="VHSND" onPress={() => { navigate('VHSND')}} />
       <TaskGridButton icon="💉" text="Medicine" onPress={() => { navigate('Medicine')}} />
@@ -771,6 +775,24 @@ const App = () => {
         return <NotificationsScreen navigate={navigate}></NotificationsScreen>;
       case 'Settings':
         return <SettingsScreen navigate={navigate}></SettingsScreen>;
+      case 'HomeVisit1':
+        return <HomeVisit1 navigate={navigate} MOCK_DATA={MOCK_DATA}></HomeVisit1>;
+      case "HomeVisit2Voice":
+  return (
+    <HomeVisit2Voice
+      navigate={navigate}
+      MOCK_DATA={MOCK_DATA}
+      houseId={houseId} // <- Pass the houseId here
+    />
+  );
+      case "HomeVisit3Form":
+  return (
+    <HomeVisit3Form
+      navigate={navigate}
+      MOCK_DATA={MOCK_DATA}
+      houseId={houseId} // <- Pass the houseId here
+    />
+  );
       default:
         return <TodayTasksScreen navigate={navigate} />;
     }
