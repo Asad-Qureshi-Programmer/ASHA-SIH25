@@ -256,7 +256,7 @@ const SettingsScreen = ({ navigate }) => {
 const styles = StyleSheet.create({
   // Static layout styles
   container: {
-    marginTop: 40,
+    paddingTop: 40,
     flex: 1,
   },
   header: {
