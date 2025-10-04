@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 // import React from 'react'; 
 import React, { useState } from 'react';
 import {
-  SafeAreaView,
+  // SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,8 +11,10 @@ import {
   TouchableOpacity,
   TextInput,
   Dimensions,
-  Image
+  Image,
+  StatusBar
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import AddFamily from './AddFamily';
@@ -25,6 +27,9 @@ import ReportsScreen from './Reports';
 import NotificationsScreen from './Notification';
 import SettingsScreen from './Settings';
 import VHSNDScreen from './Vhsnd';
+import HomeVisit1 from './HomeVisit';
+import HomeVisit2Voice from './HomeVisit2Voice';
+import HomeVisit3Form from './HomeVisit3Form';
 
 import ASHA_LOGO from './../../assets/images/LOGO.png'; 
 
@@ -712,7 +717,7 @@ const AppHeader = ({ title, navigate }) => (
       <View style={styles.logoContainer} onPress={() => navigate("Tasks")}>
         <Image 
           source={ASHA_LOGO} 
-          style={{width:"50", height:"50", margin:"8"}}
+          style={{width:"40", height:"40", margin:"8"}}
           resizeMode="contain" 
           />
         <Text style={styles.logoText}>AshaCare</Text>
@@ -884,30 +889,46 @@ const markTodosDone = (navigate) => {
 const today = new Date();
 const localeDate = today.toLocaleDateString();
 
-const TodayTasksScreen = ({ navigate }) => (
-  <ScrollView style={styles.screenContainer} contentContainerStyle={styles.contentPadding}>
-    <View style={styles.screenHeader}>
-      <Text style={styles.screenTitle}>Today's Tasks</Text>
-      <Text style={styles.dateText}>{localeDate}</Text>
-    </View>
+const TodayTasksScreen = ({ navigate }) => {
+  const [tasks, setTasks] = useState(MOCK_DATA.tasks); // put tasks in state
 
-    <View style={styles.tasksCard}>
-      {MOCK_DATA.tasks.map(task => (
-        <View key={task.id} style={styles.taskItem}>
-          {/* Checkbox implementation for interactive task completion */}
-          <TouchableOpacity style={styles.checkbox} onPress={() => { task.done = !task.done; }}>
-            <Text style={styles.checkboxText}>{task.done === true ? "✔️" : " "}</Text>
-          </TouchableOpacity>
-          <Text style={styles.taskText}>{task.text}</Text>
-        </View>
-      ))}
-      <TouchableOpacity style={styles.doneButton} onPress={() => markTodosDone(navigate)}>
+  const toggleTask = (id) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === id ? { ...task, done: !task.done } : task
+      )
+    );
+  };
+  return (
+  <ScrollView style={styles.screenContainer} contentContainerStyle={styles.contentPadding}>
+     <View style={styles.screenHeader}>
+        <Text style={styles.screenTitle}>Today's Tasks</Text>
+        <Text style={styles.dateText}>{localeDate}</Text>
+      </View>
+
+      <View style={styles.tasksCard}>
+        {tasks.map(task => (
+          <View key={task.id} style={styles.taskItem}>
+            <TouchableOpacity style={styles.checkbox} onPress={() => toggleTask(task.id)}>
+              <Text style={styles.checkboxText}>{task.done ? "✔️" : " "}</Text>
+            </TouchableOpacity>
+            <Text style={styles.taskText}>{task.text}</Text>
+          </View>
+        ))}
+       <TouchableOpacity
+        style={styles.doneButton}
+        onPress={() => {
+          setTasks(prev => prev.map(task => ({ ...task, done: true })));
+          navigate('SomeScreen'); // or wherever you want to go
+        }}
+      >
         <Text style={styles.doneButtonText}>✔️ Done</Text>
       </TouchableOpacity>
-    </View>
+      </View>
 
     <View style={styles.gridContainer}>
-      <TaskGridButton icon="🏠" text="Start Home Visit" onPress={() => navigate('HouseDetails', { houseId: MOCK_DATA.houses[0].id })} />
+      {/* <TaskGridButton icon="🏠" text="Start Home Visit" onPress={() => navigate('HouseDetails', { houseId: MOCK_DATA.houses[0].id })} /> */}
+      <TaskGridButton icon="🏠" text="Start Home Visit" onPress={() => navigate('HomeVisit1')} />
       <TaskGridButton icon="✏️" text="Add/Update House Details" onPress={() => navigate('Houses')} />
       <TaskGridButton icon="👨‍👩‍👧‍👦" text="VHSND" onPress={() => { navigate('VHSND')}} />
       <TaskGridButton icon="💉" text="Medicine" onPress={() => { navigate('Medicine')}} />
@@ -916,7 +937,7 @@ const TodayTasksScreen = ({ navigate }) => (
     </View>
 
   </ScrollView>
-);
+)};
 
 const RegisteredHousesScreen = ({ navigate }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -1125,12 +1146,20 @@ const App = () => {
         return <NotificationsScreen navigate={navigate}></NotificationsScreen>;
       case 'Settings':
         return <SettingsScreen navigate={navigate}></SettingsScreen>;
+      case 'HomeVisit1':
+        return <HomeVisit1 navigate={navigate} MOCK_DATA={MOCK_DATA} ></HomeVisit1>;
+      case 'HomeVisit2Voice':
+        return <HomeVisit2Voice navigate={navigate} MOCK_DATA={MOCK_DATA} houseId={houseId} ></HomeVisit2Voice>;
+      case 'HomeVisit3Form':
+        return <HomeVisit3Form navigate={navigate} MOCK_DATA={MOCK_DATA} setMockData={setMockData} houseId={houseId} ></HomeVisit3Form>;
       default:
         return <TodayTasksScreen navigate={navigate} />;
     }
   };
 
   return (
+    <>
+    <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
     <SafeAreaView style={styles.appContainer}>
       {
         currentScreen == "Settings" ||
@@ -1145,6 +1174,7 @@ const App = () => {
       }
       {/* <View style={{width:"100%", height:"50px", backgroundColor:"#fff"}}></View> */}
     </SafeAreaView>
+    </>
   );
 };
 
@@ -1174,8 +1204,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 15,
-    paddingTop:50,
+    padding: 7,
+    paddingTop:7,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
     backgroundColor: '#FFF',
@@ -1190,7 +1220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconText: {
-    fontSize: 22,
+    fontSize: 18,
     color: '#4B5563',
     marginHorizontal: 10,
   },
@@ -1201,13 +1231,13 @@ const styles = StyleSheet.create({
     marginLeft:10,
   },
   userIconWrapper: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 40,
+    height: 40,
+    borderRadius: 30,
     backgroundColor: '#3B82F6',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 10,
+    // marginLeft: 10,
   },
   // Screen Title/Header
   screenHeader: {

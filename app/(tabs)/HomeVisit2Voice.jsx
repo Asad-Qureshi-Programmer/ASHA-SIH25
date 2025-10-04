@@ -129,7 +129,7 @@ export default function HomeVisit2Voice({ navigate, MOCK_DATA, houseId }) {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <View style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Header Section */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
@@ -148,7 +148,7 @@ export default function HomeVisit2Voice({ navigate, MOCK_DATA, houseId }) {
         </View>
 
         {/* Members List */}
-        <View style={styles.membersList}>
+        <ScrollView style={styles.membersList}>
           {houseMembers.map((member) => (
             <View key={member.id} style={styles.memberCard}>
               <View style={styles.memberLeft}>
@@ -169,11 +169,11 @@ export default function HomeVisit2Voice({ navigate, MOCK_DATA, houseId }) {
                 ]}>
                   <Text style={styles.statusText}>{member.status}</Text>
                 </View>
-                <Feather name="chevron-down" size={20} color="#666" />
+                {/* <Feather name="chevron-down" size={20} color="#666" /> */}
               </View>
             </View>
           ))}
-        </View>
+        </ScrollView>
 
         {/* Text Input */}
         <View style={styles.inputContainer}>
@@ -205,7 +205,7 @@ export default function HomeVisit2Voice({ navigate, MOCK_DATA, houseId }) {
 
         {/* Action Buttons */}
         <View style={styles.actionButtons}>
-          <TouchableOpacity style={styles.backButton}>
+          <TouchableOpacity style={styles.backButton} onPress={()=>navigate("HomeVisit1")} >
             <Feather name="arrow-left" size={20} color="#0066CC" />
             <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
@@ -221,7 +221,7 @@ export default function HomeVisit2Voice({ navigate, MOCK_DATA, houseId }) {
   <Text style={styles.confirmButtonText}>Confirm →</Text>
 </TouchableOpacity>
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 }
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   headerLeft: {
     flexDirection: 'row',
@@ -272,14 +272,15 @@ const styles = StyleSheet.create({
   },
   membersList: {
     gap: 12,
-    marginBottom: 24,
+    marginBottom: 16,
+   
   },
   memberCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 50,
     padding: 16,
     borderWidth: 1,
     borderColor: '#E0E0E0',
@@ -344,7 +345,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: 12,
   },
   textInput: {
     borderWidth: 1,
@@ -352,6 +353,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     minHeight: 100,
+    maxHeight:120,
     fontSize: 14,
     color: '#333',
     textAlignVertical: 'top',
@@ -359,7 +361,7 @@ const styles = StyleSheet.create({
   },
   voiceButtonContainer: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 16,
   },
   voiceButton: {
     width: 80,

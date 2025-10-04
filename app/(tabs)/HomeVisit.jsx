@@ -164,8 +164,8 @@ export default function HomeVisitScreen({ navigate, MOCK_DATA }) {
 
       {/* Bottom Buttons */}
       <View style={styles.bottomButtons}>
-        <TouchableOpacity style={styles.backButton}>
-          <Text style={styles.backButtonText}>← Back</Text>
+        <TouchableOpacity style={styles.backButton} onPress={()=> navigate("Tasks")} >
+          <Text style={styles.backButtonText}  >← Back</Text>
         </TouchableOpacity>
         <TouchableOpacity
   style={styles.confirmButton}
