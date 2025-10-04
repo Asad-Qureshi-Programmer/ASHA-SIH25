@@ -28,98 +28,82 @@ export default function HomeVisit2Voice({ navigate, MOCK_DATA, houseId }) {
 
   // Generate dynamic text based on house members
   const generateVisitText = () => {
-    let text = '';
-    houseMembers.forEach((member, index) => {
-      if (member.status === 'Pregnant') {
-        text += `ANC visit Done for ${member.name}, `;
-        if (member.ifaTablets > 0) {
-          text += `${member.ifaTablets} IFA Tablets given to ${member.name}, `;
-        }
-        if (member.tt1) {
-          text += `TT1 given to ${member.name}, `;
-        }
-        if (member.tbSymptomChecked) {
-          text += `TB Symptom of ${member.name} Checked, `;
-        }
-        if (member.weight) {
-          text += `Weight measured ${member.weight} kg, `;
-        }
-        if (member.bp && member.bp !== 'N/A') {
-          text += `BP measured ${member.bp}, `;
-        }
-      } else if (member.status === 'Child' || member.status === 'Infant') {
-        text += `Vaccination given to ${member.name}, `;
-        if (member.zincTablets > 0) {
-          text += `${member.zincTablets} Zinc Tablets given to ${member.name}, `;
-        }
-        if (member.orsPackets > 0) {
-          text += `${member.orsPackets} ORS Packets given to ${member.name}, `;
-        }
-        if (member.weight) {
-          text += `Weight measured ${member.weight} kg, `;
-        }
-      } else if (member.status === 'Lactating') {
-        text += `Post-partum checkup done for ${member.name}, `;
-        if (member.calciumTablets > 0) {
-          text += `${member.calciumTablets} Calcium Tablets given to ${member.name}, `;
-        }
-        if (member.weight) {
-          text += `Weight measured ${member.weight} kg, `;
-        }
-      } else if (member.status === 'Adolescent') {
-        text += `Health checkup done for ${member.name}, `;
-        if (member.ifaTablets > 0) {
-          text += `${member.ifaTablets} IFA Tablets given to ${member.name}, `;
-        }
-        if (member.weight) {
-          text += `Weight measured ${member.weight} kg, `;
-        }
-      } else if (member.status === 'Chronic') {
-        text += `Health checkup done for ${member.name}, `;
-        if (member.paracetamol > 0) {
-          text += `${member.paracetamol} Paracetamol tablets given to ${member.name}, `;
-        }
-        if (member.weight) {
-          text += `Weight measured ${member.weight} kg, `;
-        }
-        if (member.bp && member.bp !== 'N/A') {
-          text += `BP measured ${member.bp}, `;
-        }
-      } else if (member.status === 'Normal') {
-        text += `General checkup done for ${member.name}, `;
-        if (member.weight) {
-          text += `Weight measured ${member.weight} kg, `;
-        }
-        if (member.bp && member.bp !== 'N/A') {
-          text += `BP measured ${member.bp}, `;
-        }
-      }
-    });
-    return text.trim();
-  };
+  let text = '';
 
-  const handleVoicePress = () => {
-    if (!isRecording) {
-      setIsRecording(true);
-      setVisitInfo('');
-      
-      // Start "recording" after 2 seconds delay
-      setTimeout(() => {
-        setIsTyping(true);
-        const fullText = generateVisitText();
-        typeText(fullText, 0);
-      }, 2000);
-    } else {
-      setIsRecording(false);
-      setIsTyping(false);
+  houseMembers.forEach((member) => {
+    if (member.status === 'Pregnant') {
+      text += `ANC visit completed for ${member.name}. `;
+      text += `20 IFA tablets given. `;
+      text += `TT1 dose administered. `;
+      text += `TB symptoms checked. `;
+      text += `Weight recorded as 60 kg. `;
+      text += `Blood pressure measured at 110/70 mmHg. `;
+    } 
+    else if (member.status === 'Child') {
+      text += `Vaccination given to ${member.name}. `;
+      text += `15 zinc tablets provided. `;
+      text += `10 ORS packets distributed. `;
+      text += `Weight recorded as 12 kg. `;
+    } 
+    else if (member.status === 'Infant') {
+      text += `Immunization completed for ${member.name}. `;
+      text += `10 zinc tablets given. `;
+      text += `10 ORS packets distributed. `;
+      text += `Weight measured as 8 kg. `;
+    } 
+    else if (member.status === 'Lactating') {
+      text += `Post-partum checkup done for ${member.name}. `;
+      text += `20 calcium tablets provided. `;
+      text += `Weight recorded as 55 kg. `;
+    } 
+    else if (member.status === 'Adolescent') {
+      text += `Health checkup completed for ${member.name}. `;
+      text += `10 IFA tablets given. `;
+      text += `Weight recorded as 45 kg. `;
+    } 
+    else if (member.status === 'Chronic') {
+      text += `Regular health checkup done for ${member.name}. `;
+      text += `30 paracetamol tablets provided. `;
+      text += `Weight recorded as 70 kg. `;
+      text += `Blood pressure checked at 130/80 mmHg. `;
+    } 
+    else if (member.status === 'Normal') {
+      text += `General checkup done for ${member.name}. `;
+      text += `Weight recorded as 65 kg. `;
+      text += `Blood pressure recorded at 120/75 mmHg. `;
+    } 
+    else if (member.status === 'Eligible Couple') {
+      text += `Family planning counseling provided to ${member.name}. `;
     }
-  };
+  });
+
+  return text.trim();
+};
+
+
+
+ const handleVoicePress = () => {
+  if (!isRecording) {
+    // Step 1: Start listening
+    setIsRecording(true); // Mic turns red
+    setVisitInfo('');      // Clear previous text
+    setIsTyping(false);    // Not typing yet
+  } else {
+    // Step 2: Stop listening, show data
+    setIsRecording(false); // Mic turns back to normal
+    setIsTyping(true);     // Typing starts
+
+    const fullText = generateVisitText();
+    typeText(fullText, 0); // Start typing simulation
+  }
+};
+
 
   const typeText = (text, index) => {
     if (index < text.length) {
       setVisitInfo(prev => prev + text[index]);
       // Random delay between 30-80ms for more natural typing
-      const delay = Math.random() * 50 + 30;
+      const delay = Math.random() * 5 + 10;
       setTimeout(() => typeText(text, index + 1), delay);
     } else {
       setIsTyping(false);

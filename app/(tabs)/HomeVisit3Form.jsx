@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function HomeVisit3Form({ navigate, MOCK_DATA, setMockData, houseId }) {
   const [expandedMembers, setExpandedMembers] = useState({});
-  const [formState, setFormState] = useState({}); // 🔹 store all checkboxes/inputs
+  // const [formState, setFormState] = useState(prefillFormState());; // 🔹 store all checkboxes/inputs
    const navigation = useNavigation();
   // Find selected house
   const selectedHouse = MOCK_DATA?.houses.find((h) => h.id === houseId) || {
@@ -17,6 +17,80 @@ export default function HomeVisit3Form({ navigate, MOCK_DATA, setMockData, house
   // Get members for this house
   const houseMembers =
     MOCK_DATA?.member.filter((member) => selectedHouse.members.includes(member.id)) || [];
+
+
+// Prefill the formState based on member type
+const prefillFormState = () => {
+  const initialState = {};
+
+  houseMembers.forEach((member) => {
+    if (member.status === "Pregnant") {
+      initialState[member.id] = {
+        ancVisit: true,
+        ttInjection: "TT1",
+        tbChecked: true,
+        weight: "60",
+        bp: "110/70",
+        ifaTablets: "20",
+        note: "6 months pregnant, ANC ongoing"
+      };
+    } else if (member.status === "Child") {
+      initialState[member.id] = {
+        zincTablets: "15",
+        orsPackets: "10",
+        weight: "12",
+        note: "Under 5, vaccination done"
+      };
+    } else if (member.status === "Infant") {
+      initialState[member.id] = {
+        zincTablets: "10",
+        orsPackets: "10",
+        weight: "8",
+        note: "Newborn, immunizations done"
+      };
+    } else if (member.status === "Lactating") {
+      initialState[member.id] = {
+        calciumTablets: "20",
+        weight: "55",
+        note: "Postpartum checkup done"
+      };
+    } else if (member.status === "Adolescent") {
+      initialState[member.id] = {
+        ifaTablets: "10",
+        weight: "45",
+        note: "Routine health checkup done"
+      };
+    } else if (member.status === "Chronic") {
+      initialState[member.id] = {
+        paracetamol: "30",
+        weight: "70",
+        bp: "130/80",
+        note: "Regular health monitoring"
+      };
+    } else if (member.status === "Normal") {
+      initialState[member.id] = {
+        weight: "65",
+        bp: "120/75",
+        note: "General checkup"
+      };
+    } else if (member.status === "Eligible Couple") {
+      initialState[member.id] = {
+        familyPlanning: true,
+        note: "Counseling done"
+      };
+    }
+  });
+
+  return initialState;
+};
+
+
+// Initialize formState with prefilled data
+const [formState, setFormState] = useState(prefillFormState());
+
+
+
+
 
   const toggleMember = (memberId) => {
     setExpandedMembers((prev) => ({ ...prev, [memberId]: !prev[memberId] }));
@@ -106,24 +180,23 @@ export default function HomeVisit3Form({ navigate, MOCK_DATA, setMockData, house
 //   houseMembers.forEach((member) => {
 //     const memberForm = formState[member.id] || {};
 
-//     // Merge formState values into the member
+//     // Merge old member data with new form updates
 //     const updatedMember = {
 //       ...member,
 //       ...memberForm,
 //     };
 
-//     // Build Medical Info summary safely
+//     // ---- Build Medical Info summary ----
 //     const ancSummary = updatedMember.ancVisit ? "ANC Visit done" : "ANC Visit pending";
 
-//     // TT Injection summary
 //     let ttCount = 0;
 //     if (updatedMember.ttInjection === "TT1") ttCount = 1;
-//     if (updatedMember.ttInjection === "TT2") ttCount = 1;
+//     if (updatedMember.ttInjection === "TT2") ttCount = 2;
 //     const ttSummary = `${ttCount}/2 TT Vaccine Done`;
 
 //     const ifaSummary = updatedMember.ifaTablets
 //       ? `${updatedMember.ifaTablets}/100 IFA Tablets delivered`
-//       : '';
+//       : "";
 
 //     const medicinesSummary = [];
 //     if (updatedMember.zincTablets) medicinesSummary.push(`${updatedMember.zincTablets} Zinc Tablets`);
@@ -132,44 +205,59 @@ export default function HomeVisit3Form({ navigate, MOCK_DATA, setMockData, house
 //     if (updatedMember.paracetamol) medicinesSummary.push(`${updatedMember.paracetamol} Paracetamol`);
 //     if (updatedMember.dewormingTablets) medicinesSummary.push(`${updatedMember.dewormingTablets} Deworming Tablets`);
 
-//     const dangerSummary = updatedMember.dangerSigns && updatedMember.dangerSigns !== 'N/A'
-//       ? ` Danger Signs: ${updatedMember.dangerSigns}`
-//       : '';
-//     const otherInfo = updatedMember.otherMedicalInfo ? `. ${updatedMember.otherMedicalInfo}` : '';
+//     const dangerSummary =
+//       updatedMember.dangerSigns && updatedMember.dangerSigns !== "N/A"
+//         ? `Danger Signs: ${updatedMember.dangerSigns}`
+//         : "";
+
+//     const otherInfo = updatedMember.otherMedicalInfo ? `. ${updatedMember.otherMedicalInfo}` : "";
 
 //     updatedMember.medicalInfo = [
 //       ancSummary,
 //       ttSummary,
 //       ifaSummary,
-//       medicinesSummary.length ? medicinesSummary.join(', ') : '',
+//       medicinesSummary.length ? medicinesSummary.join(", ") : "",
 //       dangerSummary,
-//       otherInfo
-//     ].filter(Boolean).join('. ');
+//       otherInfo,
+//     ]
+//       .filter(Boolean)
+//       .join(". ");
 
-//     // Update MOCK_DATA safely
+//     // ---- Update MOCK_DATA globally ----
 //     setMockData((prev) => {
 //       const prevMembers = prev?.member || [];
 //       const prevHouses = prev?.houses || [];
 
+//       // Update this member
 //       const updatedMembers = prevMembers.map((m) =>
 //         m.id === member.id ? updatedMember : m
 //       );
 
+//       // Recalculate house stats
 //       const updatedHouses = prevHouses.map((house) => {
-//         const houseMembersArray = house?.members || [];
-//         const memberObjects = houseMembersArray.map((mid) =>
-//           updatedMembers.find((m) => m.id === mid) || {}
+//         if (!house.members) return house;
+
+//         const memberObjects = house.members.map(
+//           (mid) => updatedMembers.find((m) => m.id === mid) || {}
 //         );
 
-//         const pregnantWomen = (memberObjects || []).filter((m) => m.status === 'Pregnant').length;
-//         const eligibleCouples = (memberObjects || []).filter((m) => m.status === 'Eligible Couple').length;
-//         const newbornChildren = (memberObjects || []).filter((m) => m.status === 'Infant').length;
-//         const childrenUnder5 = (memberObjects || []).filter((m) => ['Child', 'Infant'].includes(m.status)).length;
-//         const highCareCount = (memberObjects || []).filter((m) => ['Pregnant', 'Chronic', 'Child', 'Infant'].includes(m.status)).length;
+//         const pregnantWomen = memberObjects.filter((m) => m.status === "Pregnant").length;
+//         const eligibleCouples = memberObjects.filter((m) => m.status === "Eligible Couple").length;
+//         const newbornChildren = memberObjects.filter((m) => m.status === "Infant").length;
+//         const childrenUnder5 = memberObjects.filter((m) =>
+//           ["Child", "Infant"].includes(m.status)
+//         ).length;
+//         const highCareCount = memberObjects.filter((m) =>
+//           ["Pregnant", "Chronic", "Child", "Infant"].includes(m.status)
+//         ).length;
 
-//         const newHistoryEntry = houseMembersArray.includes(member.id)
-//           ? [{ date: new Date().toLocaleDateString(), text: `Updated data for ${updatedMember.name}` }, ...(house.history || [])]
-//           : (house.history || []);
+//         // History log if member is part of this house
+//         const newHistoryEntry = house.members.includes(member.id)
+//           ? [
+//               { date: new Date().toLocaleDateString(), text: `Updated data for ${updatedMember.name}` },
+//               ...(house.history || []),
+//             ]
+//           : house.history || [];
 
 //         return {
 //           ...house,
@@ -190,9 +278,9 @@ export default function HomeVisit3Form({ navigate, MOCK_DATA, setMockData, house
 //     });
 //   });
 
-//   console.log("All members updated:", houseMembers.map((m) => formState[m.id] || {}));
-//   navigate("Tasks");
+//   console.log("✅ Form saved for house:", selectedHouse.id);
 // };
+
 
 
 
@@ -279,25 +367,33 @@ console.log("setMockData:", setMockData);
             </View>
 
             {/* Note */}
-            <View style={{ marginBottom: 8 }}>
-              <Text style={{ fontSize: 14, fontWeight: "600", color: "#1e40af", marginBottom: 4 }}>Note</Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  borderWidth: 1,
-                  borderColor: "#ccc",
-                  borderRadius: 8,
-                  padding: 8,
-                }}
-              >
-                <FontAwesome name="heart" size={16} color="#888" />
-                <TextInput
-                  placeholder="i.e. pregnant, 6 months"
-                  style={{ marginLeft: 6, flex: 1, fontSize: 14, color: "#555" }}
-                />
-              </View>
-            </View>
+<View style={{ marginBottom: 8 }}>
+  <Text style={{ fontSize: 14, fontWeight: "600", color: "#1e40af", marginBottom: 4 }}>Note</Text>
+  <View
+    style={{
+      flexDirection: "row",
+      alignItems: "center",
+      borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 8,
+      padding: 8,
+    }}
+  >
+    <FontAwesome name="heart" size={16} color="#888" />
+    <TextInput
+      placeholder="i.e. pregnant, 6 months"
+      style={{ marginLeft: 6, flex: 1, fontSize: 14, color: "#555" }}
+      value={formState[member.id]?.note || ""}
+      onChangeText={(text) =>
+        setFormState((prev) => ({
+          ...prev,
+          [member.id]: { ...prev[member.id], note: text },
+        }))
+      }
+    />
+  </View>
+</View>
+
 
             {/* Full Form Based on Status */}
             {(member.status === "Pregnant" ||
@@ -309,7 +405,7 @@ console.log("setMockData:", setMockData);
               member.status === "Normal") && (
               <>
                 {/* Medical Info */}
-            <Text style={{ fontWeight: "600", fontSize: 16, color: "#1e40af", marginBottom: 6 }}>
+            <Text style={{ fontWeight: "600", fontSize: 16, color: "#1e40af", marginBottom: 10 }}>
               Medical Info
             </Text>
 
@@ -317,37 +413,58 @@ console.log("setMockData:", setMockData);
             {renderCheckbox(member.id, "tbChecked", "TB Symptom Checked")}
             {renderCheckbox(member.id, "nutritionCounselling", "Nutrition Counselling")}
             {renderCheckbox(member.id, "vhsndParticipation", "VHSND Participation")}
+             <View style={{ flexDirection: "row", gap: 12, marginBottom: 8, marginTop:8 }}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{fontWeight:'bold'}} >Weight (kg)</Text>
+                    <TextInput
+  placeholder="Weight"
+  placeholderTextColor="#808080"
+  keyboardType="numeric"
+  value={formState[member.id]?.weight || ""}
+  onChangeText={(val) =>
+    setFormState(prev => ({
+      ...prev,
+      [member.id]: { ...prev[member.id], weight: val }
+    }))
+  }
+  style={[styles.input, {borderWidth:1, borderColor:'#ccc', borderRadius:8, marginBottom:10}]}
+/>
+
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{fontWeight:'bold'}} >BP</Text>
+                    <TextInput
+  placeholder="120/80"
+  placeholderTextColor="#808080"
+  value={formState[member.id]?.bp || ""}
+  onChangeText={(val) =>
+    setFormState(prev => ({
+      ...prev,
+      [member.id]: { ...prev[member.id], bp: val }
+    }))
+  }
+  style={[styles.input, {borderWidth:1, borderColor:'#ccc', borderRadius:8, marginBottom:10}]}
+/>
+
+                  </View>
+                </View>
 
             {/* Pregnant */}
             {member.status === "Pregnant" && (
               <>
                 {renderCheckbox(member.id, "ancVisit", "ANC Visit Done")}
 
-                <Text style={{ fontWeight: "600", marginBottom: 4 }}>TT Injection</Text>
+                <Text style={{ fontWeight: "600", marginBottom: 4 , marginTop:8}}>TT Injection</Text>
                 {["TT1", "TT2", "Booster"].map((opt) =>
                  <React.Fragment key={opt}>
                   {renderRadio(member.id, "ttInjection", opt, opt)}
                 </React.Fragment>
                 )}
 
-                <View style={{ flexDirection: "row", gap: 12, marginBottom: 8 }}>
-                  <View style={{ flex: 1 }}>
-                    <Text>Weight (kg)</Text>
-                    <TextInput
-                      placeholder="Weight"
-                      placeholderTextColor="#808080"
-                      keyboardType="numeric"
-                      style={styles.input}
-                    />
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text>BP</Text>
-                    <TextInput placeholder="120/80" placeholderTextColor="#808080" style={styles.input} />
-                  </View>
-                </View>
+                
 
-                <Text>Danger Signs</Text>
-                <TextInput placeholder="Enter danger signs" placeholderTextColor="#808080" style={styles.input} />
+                <Text style={{marginTop:8, fontWeight:'bold'}} >Danger Signs</Text>
+                <TextInput placeholder="Enter danger signs" placeholderTextColor="#808080" style={[styles.input, {borderWidth:1, borderColor:'#ccc', borderRadius:8, marginBottom:10}]} />
               </>
             )}
 
@@ -362,17 +479,17 @@ console.log("setMockData:", setMockData);
                 )}
 
                 <Text>Birth Weight (kg)</Text>
-                <TextInput placeholder="Birth Weight" placeholderTextColor="#808080" keyboardType="numeric" style={styles.input} />
+                <TextInput placeholder="Birth Weight" placeholderTextColor="#808080" keyboardType="numeric" style={[styles.input, {borderWidth:1, borderColor:'#ccc', borderRadius:8, marginBottom:10}]} />
               </>
             )}
 
             {/* Child */}
             {member.status === "Child" && (
               <>
-                <Text>Weight (kg)</Text>
-                <TextInput placeholder="Weight" placeholderTextColor="#808080" keyboardType="numeric" style={styles.input} />
-                <Text>Height (cm)</Text>
-                <TextInput placeholder="Height" placeholderTextColor="#808080" keyboardType="numeric" style={styles.input} />
+                
+
+                <Text style={{fontWeight:'bold'}} >Height (cm)</Text>
+                <TextInput placeholder="Height" placeholderTextColor="#808080" keyboardType="numeric" style={[styles.input, {borderWidth:1, borderColor:'#ccc', borderRadius:8, marginBottom:10}]} />
               </>
             )}
 
@@ -385,12 +502,17 @@ console.log("setMockData:", setMockData);
                     <View key={idx}>
                         <Text>{med}</Text>
                         <TextInput
-                          
                           placeholder={med}
                           placeholderTextColor="#808080"
                           keyboardType="numeric"
-                          defaultValue={member[med] ? String(member[med]) : ""}
-                          style={{ borderWidth: 1, borderColor: "#ccc", borderRadius: 8, padding: 8, marginBottom: 6,  color: "black"  }}
+                          value={formState[member.id]?.[med] || ""}
+                          onChangeText={(val) => 
+                            setFormState(prev => ({
+                              ...prev,
+                              [member.id]: { ...prev[member.id], [med]: val }
+                            }))
+                          }
+                          style={{ borderWidth: 1, borderColor: "#ccc", borderRadius: 8, padding: 8, marginBottom: 6, color: "black" }}
                         />
                     </View>
                   )
@@ -462,6 +584,7 @@ console.log("setMockData:", setMockData);
       {/* Confirm Button */}
       <TouchableOpacity
         onPress={() => {
+          // handleSubmit()
   setTimeout(() => {
     navigate("Tasks");
   }, 1000); // 1000 ms = 1 second

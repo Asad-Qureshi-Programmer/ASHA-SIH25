@@ -757,22 +757,49 @@ const RiskTag = ({ status }) => {
   );
 };
 
-const HouseSummaryCard = ({ house }) => {
+function getHouseSummary(house, allMembers) {
+  // 1. Collect actual member objects for this house
+  const houseMembers = house.members
+    .map(mid => allMembers.find(m => m.id === mid))
+    .filter(Boolean); // remove undefined just in case
+
+  // 2. Count based on statuses/ages
+  return {
+    membersCount: houseMembers.length,
+    pregnantWomen: houseMembers.filter(m => m.status?.toLowerCase() === "pregnant").length,
+    lactatingWomen: houseMembers.filter(m => m.status?.toLowerCase() === "lactating").length,
+    newbornChildren: houseMembers.filter(m => m.status?.toLowerCase() === "infant" && m.age === 0).length,
+    childrenUnder5: houseMembers.filter(m => m.age > 0 && m.age <= 5).length,
+    eligibleCouples: houseMembers.filter(m => m.status?.toLowerCase() === "eligible couple").length,
+    highCareCount: houseMembers.filter(m =>
+      ["chronic", "pregnant", "lactating", "infant", "child"].includes(m.status?.toLowerCase())
+    ).length,
+  };
+}
+
+
+const HouseSummaryCard = ({ house, allMembers }) => {
+  const summary = getHouseSummary(house, allMembers);
+
   const data = [
-    { icon: '👤', label: 'Members', value: house.membersCount },
-    { icon: '⚠️', label: 'High Care', value: house.highCareCount },
-    { icon: '🤰', label: 'Pregnant Women', value: house.pregnantWomen },
-    { icon: '👨‍👩‍👧', label: 'Eligible Couples', value: house.eligibleCouples },
-    { icon: '👶', label: 'Newborn Children', value: house.newbornChildren },
-    { icon: '👧', label: 'Children (under 5)', value: house.childrenUnder5 },
+    { icon: '👤', label: 'Members', value: summary.membersCount },
+    { icon: '⚠️', label: 'High Care', value: summary.highCareCount },
+    { icon: '🤰', label: 'Pregnant Women', value: summary.pregnantWomen },
+    { icon: '🍼', label: 'Lactating Women', value: summary.lactatingWomen },
+    { icon: '👨‍👩‍👧', label: 'Eligible Couples', value: summary.eligibleCouples },
+    { icon: '👶', label: 'Newborn Children', value: summary.newbornChildren },
+    { icon: '👧', label: 'Children (under 5)', value: summary.childrenUnder5 },
   ];
 
   return (
     <View style={styles.card}>
+      <Text style={[styles.summaryAddressText, {fontSize:20, fontWeight:'600', color:'blue'}]}>
+        {house.head}
+      </Text>
       <View style={styles.summaryAddressContainer}>
-        {/* <Text style={styles.iconTextSmall}>📍</Text> */}
         <Text style={styles.summaryAddressText}>{house.address}</Text>
       </View>
+
       <View style={styles.summaryGrid}>
         {data.map((item, index) => (
           <View key={index} style={styles.summaryGridItem}>
@@ -784,6 +811,7 @@ const HouseSummaryCard = ({ house }) => {
           </View>
         ))}
       </View>
+
       <View style={styles.summaryFooter}>
         <Text style={styles.summaryFooterText}>
           <Text style={styles.iconTextSmall}>🕒</Text> Last Update: {house.lastVisit}
@@ -793,6 +821,7 @@ const HouseSummaryCard = ({ house }) => {
     </View>
   );
 };
+
 
 const MemberCard = ({ member }) => {
   const [showMedical, setShowMedical] = useState(false);
@@ -958,8 +987,8 @@ const RegisteredHousesScreen = ({ navigate }) => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.addHouseButton}>
-        <Text style={styles.addHouseButtonText} onPress={() => {navigate("AddFamily")}}>➕ Add New House</Text>
+      <TouchableOpacity style={styles.addHouseButton} onPress={() => navigate("AddFamily")} >
+        <Text style={styles.addHouseButtonText} >➕ Add New House</Text>
       </TouchableOpacity>
 
       <View style={styles.searchContainer}>
@@ -999,7 +1028,7 @@ const RegisteredHousesScreen = ({ navigate }) => {
   );
 };
 
-const HouseDetailsScreen = ({ houseId, navigate }) => {
+const HouseDetailsScreen = ({ houseId, allMembers,navigate }) => {
   const house = MOCK_DATA.houses.find(h => h.id === houseId);
   const member = MOCK_DATA.member;
   const [searchTerm, setSearchTerm] = useState('');
@@ -1039,8 +1068,8 @@ const HouseDetailsScreen = ({ houseId, navigate }) => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.addMemberButton}>
-        <Text style={styles.addMemberButtonText} onPress={() => {navigate('AddMember')}}>➕ Add New Member</Text>
+      <TouchableOpacity style={styles.addMemberButton} onPress={() => navigate('AddMember')} >
+        <Text style={styles.addMemberButtonText} >➕ Add New Member</Text>
       </TouchableOpacity>
 
       <View style={styles.searchContainer}>
@@ -1055,7 +1084,7 @@ const HouseDetailsScreen = ({ houseId, navigate }) => {
         <Text style={styles.iconTextSmall}>☰</Text>
       </View>
 
-      <HouseSummaryCard house={house} />
+      <HouseSummaryCard house={house} allMembers={allMembers} />
 
       {
         filteredMembers.map((member, i) => (
@@ -1125,7 +1154,7 @@ const App = () => {
       case 'Houses':
         return <RegisteredHousesScreen navigate={navigate} />;
       case 'HouseDetails':
-        return <HouseDetailsScreen houseId={houseId} navigate={navigate} />;
+        return <HouseDetailsScreen houseId={houseId} allMembers={MOCK_DATA.member} navigate={navigate} />;
       case 'AddFamily':
         return <AddFamily navigate={navigate} AddFam={AddFam} idd={MOCK_DATA.houses[MOCK_DATA.houses.length-1].id}></AddFamily>;
       case 'AddMember':
@@ -1209,6 +1238,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
     backgroundColor: '#FFF',
+    zIndex: 100
   },
   logo: {
     fontSize: 18,

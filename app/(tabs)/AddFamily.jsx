@@ -7,6 +7,9 @@ import {
   StyleSheet,
   SafeAreaView,
   Dimensions,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -41,11 +44,22 @@ const AddFamilyScreen = ({navigate, AddFam, idd}) => {
   }
   return (
     <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+            
+              style={{ flex: 1 }}
+              behavior={Platform.OS === "ios" ? "padding" : "height"} // iOS vs Android
+              keyboardVerticalOffset={80} // adjust depending on your header height
+            >
+        <ScrollView
+                //  style={styles.scrollContainer}
+                  contentContainerStyle={{ padding: 20 }}
+                  keyboardShouldPersistTaps="handled"
+                >
       {/* -------------------- Content Area -------------------- */}
       <View style={styles.content}>
         <View style={styles.titleContainer}>
           {/* <MaterialCommunityIcons name="message-text-outline" size={24} color="#000" /> */}
-          <TouchableOpacity onPress={() => {navigate('Houses')}} style={styles.backButton}>
+          <TouchableOpacity onPress={() => navigate('Houses')} style={styles.backButton}>
             <MaterialCommunityIcons name="arrow-left" size={24} color="#333" />
           </TouchableOpacity>
           <Text style={styles.titleText}>Add Family</Text>
@@ -80,13 +94,13 @@ const AddFamilyScreen = ({navigate, AddFam, idd}) => {
         </View>
 
         {/* Main Action Button */}
-        <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.addButtonText} onPress={() => {if(head.trim() !== "" && address.trim() !== "") AddFam(data(), navigate)}}>Add Family</Text>
+        <TouchableOpacity style={styles.addButton} onPress={() => {if(head.trim() !== "" && address.trim() !== "") AddFam(data(), navigate)}} >
+          <Text style={styles.addButtonText} >Add Family</Text>
           <Feather name="arrow-right" size={20} color="#fff" style={{ marginLeft: 5 }} />
         </TouchableOpacity>
       </View>
-
-     
+    </ScrollView>
+     </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
