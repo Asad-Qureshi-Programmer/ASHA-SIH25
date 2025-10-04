@@ -335,18 +335,19 @@ console.log("setMockData:", setMockData);
                     <Text>Weight (kg)</Text>
                     <TextInput
                       placeholder="Weight"
+                      placeholderTextColor="#808080"
                       keyboardType="numeric"
                       style={styles.input}
                     />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text>BP</Text>
-                    <TextInput placeholder="120/80" style={styles.input} />
+                    <TextInput placeholder="120/80" placeholderTextColor="#808080" style={styles.input} />
                   </View>
                 </View>
 
                 <Text>Danger Signs</Text>
-                <TextInput placeholder="Enter danger signs" style={styles.input} />
+                <TextInput placeholder="Enter danger signs" placeholderTextColor="#808080" style={styles.input} />
               </>
             )}
 
@@ -361,7 +362,7 @@ console.log("setMockData:", setMockData);
                 )}
 
                 <Text>Birth Weight (kg)</Text>
-                <TextInput placeholder="Birth Weight" keyboardType="numeric" style={styles.input} />
+                <TextInput placeholder="Birth Weight" placeholderTextColor="#808080" keyboardType="numeric" style={styles.input} />
               </>
             )}
 
@@ -369,9 +370,9 @@ console.log("setMockData:", setMockData);
             {member.status === "Child" && (
               <>
                 <Text>Weight (kg)</Text>
-                <TextInput placeholder="Weight" keyboardType="numeric" style={styles.input} />
+                <TextInput placeholder="Weight" placeholderTextColor="#808080" keyboardType="numeric" style={styles.input} />
                 <Text>Height (cm)</Text>
-                <TextInput placeholder="Height" keyboardType="numeric" style={styles.input} />
+                <TextInput placeholder="Height" placeholderTextColor="#808080" keyboardType="numeric" style={styles.input} />
               </>
             )}
 
@@ -386,9 +387,10 @@ console.log("setMockData:", setMockData);
                         <TextInput
                           
                           placeholder={med}
+                          placeholderTextColor="#808080"
                           keyboardType="numeric"
                           defaultValue={member[med] ? String(member[med]) : ""}
-                          style={{ borderWidth: 1, borderColor: "#ccc", borderRadius: 8, padding: 8, marginBottom: 6 }}
+                          style={{ borderWidth: 1, borderColor: "#ccc", borderRadius: 8, padding: 8, marginBottom: 6,  color: "black"  }}
                         />
                     </View>
                   )
@@ -475,6 +477,12 @@ console.log("setMockData:", setMockData);
 
 
 const styles = StyleSheet.create({
+
+  input: {
+     color: "black", 
+ 
+  },
+
   bottomButtons: {
     flexDirection: 'row',
     paddingHorizontal: 20,
